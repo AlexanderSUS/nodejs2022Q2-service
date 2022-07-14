@@ -1,4 +1,9 @@
-export class UpdateUserDto {
-  readonly login: string;
-  readonly password: string;
+import { IsNotEmpty } from 'class-validator';
+
+export class UpdatePasswordDto {
+  @IsNotEmpty()
+  readonly oldPassword: string;
+
+  @IsNotEmpty()
+  readonly newPassword: string;
 }

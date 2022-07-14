@@ -1,4 +1,4 @@
-export class UserDto {
+export class UserEntity {
   readonly id: string; // uuid v4
   readonly login: string;
   readonly password: string;
