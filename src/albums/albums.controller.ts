@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   ParseUUIDPipe,
@@ -34,7 +34,7 @@ export class AlbumsController {
     return this.albumsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
