@@ -14,7 +14,7 @@ export class UserService {
       id: uuidv4(),
       version: 1,
       createdAt: Date.now(),
-      updatedAt: 0,
+      updatedAt: Date.now(),
     });
 
     const newUser = { ...this.users[this.users.length - 1] };
