@@ -10,8 +10,10 @@ import {
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
+import { ApiResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UserResponse } from './dto/response-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
@@ -21,17 +23,18 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.userService.create(createUserDto) as Promise<UserResponse>;
   }
 
   @Get()
+  @ApiResponse({ status: 200, type: Array<UserResponse> })
   findAlll() {
-    return this.userService.findAll();
+    return this.userService.findAll() as Promise<UserResponse[]>;
   }
 
   @Get(':id')
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.userService.findOne(id);
+    return this.userService.findOne(id) as Promise<UserResponse>;
   }
 
   @Put(':id')
@@ -39,7 +42,7 @@ export class UserController {
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
     @Body() updateUserDto: UpdatePasswordDto,
   ) {
-    return this.userService.update(id, updateUserDto);
+    return this.userService.update(id, updateUserDto) as Promise<UserResponse>;
   }
 
   @Delete(':id')
