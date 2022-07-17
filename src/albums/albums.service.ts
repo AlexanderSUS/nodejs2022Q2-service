@@ -9,13 +9,11 @@ import { AlbumEntity } from './entities/album.entity';
 export class AlbumsService {
   constructor(private readonly DbService: DbService) {}
 
-  private albums: AlbumEntity[] = [];
-
   async create(createAlbumDto: CreateAlbumDto) {
     return this.DbService.create({
       dto: createAlbumDto,
       type: DbStoreKey.albums,
-    });
+    }) as Promise<AlbumEntity>;
   }
 
   findAll() {

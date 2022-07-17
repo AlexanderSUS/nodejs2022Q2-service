@@ -10,7 +10,7 @@ import {
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
-import { ApiResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiResponse } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserResponse } from './dto/response-user.dto';
