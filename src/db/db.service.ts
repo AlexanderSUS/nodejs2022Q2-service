@@ -9,6 +9,7 @@ import {
   FavouritesKey,
 } from 'src/types/db';
 import { DbMessage } from 'src/const/enum';
+import { UserResponse } from 'src/user/dto/response-user.dto';
 
 @Injectable()
 export class DbService {
@@ -66,7 +67,7 @@ export class DbService {
 
       delete newUser.password;
 
-      return newUser;
+      return newUser as UserResponse;
     }
   }
 
