@@ -166,14 +166,38 @@ export class DbService {
 
     if (type === 'artists') {
       this.store[type] = this.store[type].filter((entity) => entity.id !== id);
+
+      this.store.albums
+        .filter((album) => album.artistId === id)
+        .forEach((album) => (album.artistId = null));
+
+      this.store.tracks
+        .filter((track) => track.artistId === id)
+        .forEach((track) => (track.artistId = null));
+
+      this.store.favourites.artists = this.store.favourites.artists.filter(
+        (artist) => artist.id !== id,
+      );
     }
 
     if (type === 'albums') {
       this.store[type] = this.store[type].filter((entity) => entity.id !== id);
+
+      this.store.tracks
+        .filter((track) => track.albumId === id)
+        .forEach((track) => (track.albumId = null));
+
+      this.store.favourites.albums = this.store.favourites.albums.filter(
+        (album) => album.id !== id,
+      );
     }
 
     if (type === 'tracks') {
       this.store[type] = this.store[type].filter((entity) => entity.id !== id);
+
+      this.store.favourites.tracks = this.store.favourites.tracks.filter(
+        (track) => track.id !== id,
+      );
     }
 
     if (type === 'users') {
