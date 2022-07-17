@@ -209,30 +209,46 @@ export class DbService {
 
   addToFavourites(id: string, type: FavouritesKey) {
     if (type === 'artists') {
-      const entity = this.store[type].find((entity) => entity.id !== id);
+      const entity = this.store[type].find((entity) => entity.id === id);
 
       if (!entity) return null;
 
-      const length = this.store.favourites[type].push(entity);
-      return this.store.favourites[type][length - 1];
+      if (
+        !this.store.favourites[type].find((artist) => artist.id === entity.id)
+      ) {
+        this.store.favourites[type].push(entity);
+      }
+
+      return entity;
     }
 
     if (type === 'albums') {
-      const entity = this.store[type].find((entity) => entity.id !== id);
+      const entity = this.store[type].find((entity) => entity.id === id);
 
       if (!entity) return null;
 
-      const length = this.store.favourites[type].push(entity);
-      return this.store.favourites[type][length - 1];
+      if (
+        !this.store.favourites[type].find((album) => album.id === entity.id)
+      ) {
+        this.store.favourites[type].push(entity);
+      }
+
+      this.store.favourites[type].push(entity);
+      return entity;
     }
 
     if (type === 'tracks') {
-      const entity = this.store[type].find((entity) => entity.id !== id);
+      const entity = this.store[type].find((entity) => entity.id === id);
 
       if (!entity) return null;
 
-      const length = this.store.favourites[type].push(entity);
-      return this.store.favourites[type][length - 1];
+      if (
+        !this.store.favourites[type].find((track) => track.id === entity.id)
+      ) {
+        this.store.favourites[type].push(entity);
+      }
+
+      return entity;
     }
   }
 
