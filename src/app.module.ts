@@ -5,6 +5,9 @@ import { AlbumsModule } from './albums/albums.module';
 import { TracksModule } from './tracks/tracks.module';
 import { DbModule } from './db/db.module';
 import { FavouritesModule } from './favourites/favourites.module';
+import { ConfigModule } from '@nestjs/config';
+import { configuration } from './config/configuration';
+import { validationSchema } from './config/validation';
 
 @Module({
   imports: [
@@ -14,6 +17,11 @@ import { FavouritesModule } from './favourites/favourites.module';
     TracksModule,
     FavouritesModule,
     DbModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+      validationSchema,
+    }),
   ],
 })
 export class AppModule {}
