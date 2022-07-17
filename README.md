@@ -5,17 +5,30 @@
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 
-## Downloading
+
+
+## Installing
+1. Clone this repo
 
 ```
-git clone {repository URL}
+git clone git@github.com:AlexanderSUS/graphql-service.git
 ```
+2. Go to `nodejs2022Q2-service` folder
+```
+cd nodejs2022Q2-service
+```
+4. Switch baranch
 
-## Installing NPM modules
+```
+git checkout develop
+```
+4. Install npm modules
 
 ```
 npm install
 ```
+
+5. Rename file `.env.example` to `.env` at src folder
 
 ## Running application
 
