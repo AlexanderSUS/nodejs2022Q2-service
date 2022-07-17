@@ -5,6 +5,8 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { FavouritesService } from './favourites.service';
 import parseUuidOptions from 'src/const/uuid';
@@ -35,17 +37,20 @@ export class FavouritesController {
   }
 
   @Delete('artist/:id')
-  removeAritst(@Param('id') id: string) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeAritst(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.favouritesService.remove(id, DbStoreKey.artists);
   }
 
   @Delete('album/:id')
-  removeAlbum(@Param('id') id: string) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeAlbum(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.favouritesService.remove(id, DbStoreKey.albums);
   }
 
   @Delete('track/:id')
-  removeTrack(@Param('id') id: string) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeTrack(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.favouritesService.remove(id, DbStoreKey.tracks);
   }
 }
