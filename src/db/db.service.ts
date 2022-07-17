@@ -70,7 +70,7 @@ export class DbService {
     }
   }
 
-  findAll(entityType: DbCollectionKey) {
+  findAll(entityType: DbKey) {
     return this.store[entityType];
   }
 

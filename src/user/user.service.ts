@@ -1,35 +1,23 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { v4 as uuidv4 } from 'uuid';
-import { UserEntity } from './entities/user.entity';
 import { UpdatePasswordDto } from './dto/update-user.dto';
+import { DbService } from 'src/db/db.service';
+import { DbMessage, DbStoreKey } from 'src/const/enum';
 
 @Injectable()
 export class UserService {
-  private users: UserEntity[] = [];
+  constructor(private readonly DbService: DbService) {}
 
   async create(userDto: CreateUserDto) {
-    this.users.push({
-      ...userDto,
-      id: uuidv4(),
-      version: 1,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
-
-    const newUser = { ...this.users[this.users.length - 1] };
-
-    delete newUser.password;
-
-    return newUser;
+    return this.DbService.create({ dto: userDto, type: DbStoreKey.users });
   }
 
   async findAll() {
-    return this.users;
+    return this.DbService.findAll(DbStoreKey.users);
   }
 
   async findOne(id: string) {
-    const user = this.users.find((user) => user.id === id);
+    const user = this.DbService.findOne(id, DbStoreKey.users);
 
     if (!user) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
@@ -39,35 +27,26 @@ export class UserService {
   }
 
   async update(id: string, updatePasswordDto: UpdatePasswordDto) {
-    const userIndex = this.users.findIndex((user) => user.id === id);
+    const result = this.DbService.update(id, {
+      dto: updatePasswordDto,
+      type: DbStoreKey.users,
+    });
 
-    if (userIndex === -1) {
+    if (!result) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    if (updatePasswordDto.oldPassword !== this.users[userIndex].password) {
+    if (result === DbMessage.wrongPassword) {
       throw new HttpException('Old password is wrong', HttpStatus.FORBIDDEN);
     }
 
-    this.users[userIndex] = {
-      ...this.users[userIndex],
-      password: updatePasswordDto.newPassword,
-      version: this.users[userIndex].version + 1,
-      updatedAt: Date.now(),
-    };
-
-    const updatedUser = { ...this.users[userIndex] };
-    delete updatedUser.password;
-
-    return updatedUser;
+    return result;
   }
 
   async remove(id: string) {
-    const initialLength = this.users.length;
+    const isFound = this.DbService.remove(id, DbStoreKey.users);
 
-    this.users = this.users.filter((user) => user.id !== id);
-
-    if (!(initialLength > this.users.length)) {
+    if (!isFound) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
   }

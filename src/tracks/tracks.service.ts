@@ -1,58 +1,52 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { TrackEntity } from './entities/track.entity';
+import { DbStoreKey } from 'src/const/enum';
+import { DbService } from 'src/db/db.service';
 
 @Injectable()
 export class TracksService {
-  private tracks: TrackEntity[] = [];
+  constructor(private readonly DbService: DbService) {}
 
   create(createTrackDto: CreateTrackDto) {
-    this.tracks.push({
-      id: uuidv4(),
-      ...createTrackDto,
+    return this.DbService.create({
+      dto: createTrackDto,
+      type: DbStoreKey.tracks,
     });
-
-    return this.tracks[this.tracks.length - 1];
   }
 
   findAll() {
-    return this.tracks;
+    return this.DbService.findAll(DbStoreKey.tracks);
   }
 
   findOne(id: string) {
-    const track = this.tracks.find((track) => track.id === id);
+    const artist = this.DbService.findOne(id, DbStoreKey.tracks);
 
-    if (!track) {
+    if (!artist) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
 
-    return track;
+    return artist;
   }
 
   update(id: string, updateTrackDto: UpdateTrackDto) {
-    const trackIndex = this.tracks.findIndex((track) => track.id === id);
+    const result = this.DbService.update(id, {
+      dto: updateTrackDto,
+      type: DbStoreKey.tracks,
+    });
 
-    if (trackIndex === -1) {
-      throw new HttpException('track not found', HttpStatus.NOT_FOUND);
+    if (!result) {
+      throw new HttpException('Aritst not found', HttpStatus.NOT_FOUND);
     }
 
-    this.tracks[trackIndex] = {
-      ...this.tracks[trackIndex],
-      ...updateTrackDto,
-    };
-
-    return this.tracks[trackIndex];
+    return result;
   }
 
   remove(id: string) {
-    const initialLength = this.tracks.length;
+    const isFound = this.DbService.remove(id, DbStoreKey.tracks);
 
-    this.tracks = this.tracks.filter((track) => track.id !== id);
-
-    if (!(initialLength > this.tracks.length)) {
-      throw new HttpException('track not found', HttpStatus.NOT_FOUND);
+    if (!isFound) {
+      throw new HttpException('Arits not found', HttpStatus.NOT_FOUND);
     }
   }
 }

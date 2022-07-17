@@ -20,7 +20,7 @@ export class FavouritesService {
   }
 
   findAll() {
-    // return this.DbService.findAll(DbStoreKey.favourites);
+    return this.DbService.findAll(DbStoreKey.favourites);
   }
 
   remove(id: string, type: FavouritesKey) {

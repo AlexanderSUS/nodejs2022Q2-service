@@ -1,58 +1,55 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
+import { DbStoreKey } from 'src/const/enum';
+import { DbService } from 'src/db/db.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { AlbumEntity } from './entities/album.entity';
 
 @Injectable()
 export class AlbumsService {
+  constructor(private readonly DbService: DbService) {}
+
   private albums: AlbumEntity[] = [];
 
   async create(createAlbumDto: CreateAlbumDto) {
-    this.albums.push({
-      id: uuidv4(),
-      ...createAlbumDto,
+    return this.DbService.create({
+      dto: createAlbumDto,
+      type: DbStoreKey.albums,
     });
-
-    return this.albums[this.albums.length - 1];
   }
 
   findAll() {
-    return this.albums;
+    return this.DbService.findAll(DbStoreKey.albums);
   }
 
   findOne(id: string) {
-    const album = this.albums.find((album) => album.id === id);
+    const album = this.DbService.findOne(id, DbStoreKey.albums);
 
     if (!album) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Album Not found', HttpStatus.NOT_FOUND);
     }
 
     return album;
   }
 
   update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const albumIndex = this.albums.findIndex((album) => album.id === id);
+    const result = this.DbService.update(id, {
+      dto: updateAlbumDto,
+      type: DbStoreKey.albums,
+    });
 
-    if (albumIndex === -1) {
-      throw new HttpException('album not found', HttpStatus.NOT_FOUND);
+    if (!result) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
 
-    this.albums[albumIndex] = {
-      ...this.albums[albumIndex],
-      ...updateAlbumDto,
-    };
-
-    return this.albums[albumIndex];
+    return result;
   }
 
   remove(id: string) {
-    const initialLength = this.albums.length;
+    const isFound = this.DbService.remove(id, DbStoreKey.albums);
 
-    this.albums = this.albums.filter((album) => album.id !== id);
-
-    if (!(initialLength > this.albums.length)) {
-      throw new HttpException('album not found', HttpStatus.NOT_FOUND);
+    if (!isFound) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
   }
 }
