@@ -16,7 +16,7 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     UserModule,
-    // ArtistsModule,
+    ArtistsModule,
     // AlbumsModule,
     // TracksModule,
     // FavouritesModule,
