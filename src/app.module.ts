@@ -17,7 +17,7 @@ import { AppService } from './app.service';
   imports: [
     UserModule,
     ArtistsModule,
-    // AlbumsModule,
+    AlbumsModule,
     // TracksModule,
     // FavouritesModule,
     // DbModule,
