@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
   db:
     image: alexandersus/home-collection-db:v1
-    container_name: postgress
+    container_name: postgres
     build: ./db
     restart: unless-stopped
     ports:
