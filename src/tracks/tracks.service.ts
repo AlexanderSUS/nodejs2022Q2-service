@@ -1,52 +1,52 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { DbStoreKey } from 'src/const/enum';
-import { DbService } from 'src/db/db.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TrackEntity } from './entities/track.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TracksService {
-  constructor(private readonly DbService: DbService) {}
+  constructor(
+    @InjectRepository(TrackEntity)
+    private trackRepository: Repository<TrackEntity>,
+  ) {}
 
   create(createTrackDto: CreateTrackDto) {
-    return this.DbService.create({
-      dto: createTrackDto,
-      type: DbStoreKey.tracks,
-    });
+    return this.trackRepository.save(createTrackDto);
   }
 
   findAll() {
-    return this.DbService.findAll(DbStoreKey.tracks);
+    return this.trackRepository.find();
   }
 
-  findOne(id: string) {
-    const artist = this.DbService.findOne(id, DbStoreKey.tracks);
+  async findOne(id: string) {
+    const track = await this.trackRepository.findOneBy({ id });
 
-    if (!artist) {
+    if (!track) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
 
-    return artist;
+    return track;
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
-    const result = this.DbService.update(id, {
-      dto: updateTrackDto,
-      type: DbStoreKey.tracks,
-    });
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    const track = await this.trackRepository.findOneBy({ id });
 
-    if (!result) {
-      throw new HttpException('Aritst not found', HttpStatus.NOT_FOUND);
+    if (!track) {
+      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
 
-    return result;
+    return this.trackRepository.save({ ...track, ...updateTrackDto });
   }
 
-  remove(id: string) {
-    const isFound = this.DbService.remove(id, DbStoreKey.tracks);
+  async remove(id: string) {
+    const track = await this.trackRepository.findOneBy({ id });
 
-    if (!isFound) {
+    if (!track) {
       throw new HttpException('Arits not found', HttpStatus.NOT_FOUND);
     }
+
+    await this.trackRepository.remove(track);
   }
 }
