@@ -1,9 +1,11 @@
 import { ArtistEntity } from 'src/artists/entities/artist.entity';
+import { TrackEntity } from 'src/tracks/entities/track.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -22,6 +24,13 @@ export class AlbumEntity {
     nullable: true,
     onDelete: 'SET NULL',
   })
-  @JoinColumn()
+  @JoinColumn({ name: 'artistId' })
   artits: ArtistEntity;
+
+  @Column({ nullable: true })
+  artistId: string;
+
+  @OneToMany(() => TrackEntity, (track) => track.albums)
+  @JoinColumn()
+  tracks: TrackEntity[];
 }
