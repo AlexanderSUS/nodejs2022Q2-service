@@ -1,56 +1,43 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DbStoreKey } from 'src/const/enum';
-import { DbService } from 'src/db/db.service';
-import { FavouritesKey } from 'src/types/db';
+import { FavouriteEntity } from './entities/favourite.entity';
 
 @Injectable()
 export class FavouritesService {
-  constructor(private readonly DbService: DbService) {}
-
-  addTrack(id: string) {
-    const track = this.DbService.addToFavourites(id, DbStoreKey.tracks);
-
-    if (!track) {
-      throw new HttpException(
-        'Entity not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
-
-    return track;
-  }
-
-  addAlbum(id: string) {
-    const album = this.DbService.addToFavourites(id, DbStoreKey.albums);
-
-    if (!album) {
-      throw new HttpException(
-        'Entity not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
-
-    return album;
-  }
-
-  addArtist(id: string) {
-    const artist = this.DbService.addToFavourites(id, DbStoreKey.artists);
-
-    if (!artist) {
-      throw new HttpException(
-        'Entity not found',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
-
-    return artist;
-  }
-
-  findAll() {
-    return this.DbService.findAll(DbStoreKey.favourites);
-  }
-
-  remove(id: string, type: FavouritesKey) {
-    return this.DbService.removeFromFavourites(id, type);
-  }
+  // async addTrack(id: string) {
+  //   const track = await this.tracksRepository.findOneBy({ id });
+  //   if (!track) {
+  //     throw new HttpException(
+  //       'Entity not found',
+  //       HttpStatus.UNPROCESSABLE_ENTITY,
+  //     );
+  //   }
+  //   return this.FavsRepository.save(track);
+  // }
+  // async addAlbum(id: string) {
+  //   const album = await this.albumRepository.findOneBy({ id });
+  //   if (!album) {
+  //     throw new HttpException(
+  //       'Entity not found',
+  //       HttpStatus.UNPROCESSABLE_ENTITY,
+  //     );
+  //   }
+  //   return this.FavsRepository.save(album);
+  // }
+  // async addArtist(id: string) {
+  //   const artist = await this.aritstRepository.findOneBy({ id });
+  //   if (!artist) {
+  //     throw new HttpException(
+  //       'Entity not found',
+  //       HttpStatus.UNPROCESSABLE_ENTITY,
+  //     );
+  //   }
+  //   return this.FavsRepository.save(artist);
+  // }
+  // findAll() {
+  //   return this.FavsRepository.find();
+  // }
+  // remove(id: string) {
+  //   this.
+  //   return this.favouriteRepository.remove();
+  // }
 }
