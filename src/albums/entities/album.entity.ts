@@ -1,10 +1,16 @@
-import { Column, Entity, Generated, PrimaryGeneratedColumn } from 'typeorm';
+import { ArtistEntity } from 'src/artists/entities/artist.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class AlbumEntity {
-  @PrimaryGeneratedColumn()
-  @Generated('uuid')
-  id: string; // uuid v4
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -12,8 +18,10 @@ export class AlbumEntity {
   @Column()
   year: number;
 
-  @Column({
+  @ManyToOne(() => ArtistEntity, (artist) => artist.albums, {
     nullable: true,
+    onDelete: 'SET NULL',
   })
-  artistId: string | null; // refers to Artist
+  @JoinColumn()
+  artits: ArtistEntity;
 }

@@ -1,14 +1,17 @@
-import { Column, Entity, Generated, PrimaryGeneratedColumn } from 'typeorm';
+import { AlbumEntity } from 'src/albums/entities/album.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ArtistEntity {
-  @PrimaryGeneratedColumn()
-  @Generated('uuid')
-  id: string; // uuid v4
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
 
   @Column()
   grammy: boolean;
+
+  @OneToMany(() => AlbumEntity, (album) => album.artits)
+  albums: AlbumEntity[];
 }
