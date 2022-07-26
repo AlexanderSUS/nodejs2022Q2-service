@@ -18,7 +18,7 @@ import { AppService } from './app.service';
     ArtistsModule,
     AlbumsModule,
     TracksModule,
-    // FavouritesModule,
+    FavouritesModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
