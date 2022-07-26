@@ -98,7 +98,7 @@ export class FavouritesService {
   }
 
   async findAll() {
-    let [favourites] = await this.favouriteRepository.find({
+    const [favourites] = await this.favouriteRepository.find({
       relations: {
         artists: true,
         albums: true,
@@ -106,11 +106,21 @@ export class FavouritesService {
       },
     });
 
-    if (!favourites) {
-      favourites = await this.favouriteRepository.save(new FavouriteEntity());
+    if (favourites) {
+      return favourites;
     }
 
-    return favourites;
+    await this.favouriteRepository.save(new FavouriteEntity());
+
+    const [emptyFavourites] = await this.favouriteRepository.find({
+      relations: {
+        artists: true,
+        albums: true,
+        tracks: true,
+      },
+    });
+
+    return emptyFavourites;
   }
 
   async removeAritst(id: string) {
