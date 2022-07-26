@@ -13,7 +13,7 @@ export class ArtistEntity {
   @Column()
   grammy: boolean;
 
-  @OneToMany(() => AlbumEntity, (album) => album.artits)
+  @OneToMany(() => AlbumEntity, (album) => album.artist)
   albums: AlbumEntity[];
 
   @OneToMany(() => TrackEntity, (track) => track.artist)

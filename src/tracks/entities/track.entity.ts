@@ -28,10 +28,10 @@ export class TrackEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'albumId' })
-  albums: AlbumEntity[];
+  album: AlbumEntity;
 
   @Column({ nullable: true })
-  aritstId: string;
+  artistId: string;
 
   @Column({ nullable: true })
   albumId: string;

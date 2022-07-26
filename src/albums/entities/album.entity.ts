@@ -25,12 +25,11 @@ export class AlbumEntity {
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'artistId' })
-  artits: ArtistEntity;
+  artist: ArtistEntity;
 
   @Column({ nullable: true })
   artistId: string;
 
-  @OneToMany(() => TrackEntity, (track) => track.albums)
-  @JoinColumn()
+  @OneToMany(() => TrackEntity, (track) => track.album)
   tracks: TrackEntity[];
 }
