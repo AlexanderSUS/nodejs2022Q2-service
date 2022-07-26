@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { IUser } from './interfaces/user.interface';
+import handleUserForResonse from 'src/utils/handleUserForResponse';
 
 @Injectable()
 export class UserService {
@@ -14,11 +15,15 @@ export class UserService {
   ) {}
 
   async create(userDto: CreateUserDto): Promise<IUser> {
-    return this.userRepository.save(userDto);
+    const user = await this.userRepository.save(userDto);
+
+    return handleUserForResonse(user);
   }
 
   async findAll(): Promise<IUser[]> {
-    return this.userRepository.find();
+    const users = await this.userRepository.find();
+
+    return users.map((user) => handleUserForResonse(user));
   }
 
   async findOne(id: string) {
@@ -28,7 +33,7 @@ export class UserService {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
 
-    return user;
+    return handleUserForResonse(user);
   }
 
   async update(id: string, updatePasswordDto: UpdatePasswordDto) {
@@ -42,10 +47,12 @@ export class UserService {
       throw new HttpException('Old password is wrong', HttpStatus.FORBIDDEN);
     }
 
-    return this.userRepository.save({
+    const updatedUser = await this.userRepository.save({
       ...user,
       password: updatePasswordDto.newPassword,
     });
+
+    return handleUserForResonse(updatedUser);
   }
 
   async remove(id: string) {
