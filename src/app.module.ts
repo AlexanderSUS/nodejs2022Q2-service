@@ -11,6 +11,7 @@ import { configuration } from './config/configuration';
 import { validationSchema } from './config/validation';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { typeOrmConfig } from './config/typeorm.config';
 
 @Module({
   imports: [
@@ -24,16 +25,7 @@ import { AppService } from './app.service';
       load: [configuration],
       validationSchema,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT as unknown as number,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(typeOrmConfig),
   ],
   controllers: [AppController],
   providers: [AppService],
