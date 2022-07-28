@@ -20,7 +20,7 @@ cd nodejs2022Q2-service
 ```
 git checkout develop
 ```
-4. Install npm modules. If you will run application only in docker container skip this step.
+4. Install npm modules
 ```
 npm install
 ```
