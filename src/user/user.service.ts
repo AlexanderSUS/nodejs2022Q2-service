@@ -36,6 +36,16 @@ export class UserService {
     return handleUserForResonse(user);
   }
 
+  async findOneByLogin(login: string) {
+    const user = await this.userRepository.findOneBy({ login });
+
+    if (!user) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
+  }
+
   async update(id: string, updatePasswordDto: UpdatePasswordDto) {
     const user = await this.userRepository.findOneBy({ id });
 
