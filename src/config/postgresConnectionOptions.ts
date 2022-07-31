@@ -10,7 +10,7 @@ const postgresConnectionOptions: PostgresConnectionOptions = {
   database: process.env.POSTGRES_DB,
   entities: ['dist/**/entities/*.entity.js'],
   synchronize: false,
-  migrations: ['dist/migrations/*.ts'],
+  migrations: ['dist/migrations/*.js'],
 };
 
 export default postgresConnectionOptions;
