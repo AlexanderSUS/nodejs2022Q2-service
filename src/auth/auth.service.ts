@@ -1,5 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-// import { RefreshDto } from './dto/refresh.dto.';
+import { Injectable } from '@nestjs/common';
+import { RefreshDto } from './dto/refresh.dto.';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import * as bycrypt from 'bcrypt';
 import { IUser } from 'src/user/interfaces/user.interface';
@@ -41,8 +41,17 @@ export class AuthService {
   async login(user: IUser) {
     const payload = { login: user.login, userId: user.id };
 
+    const secret = process.env.JWT_SECRET_KEY;
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, {
+        expiresIn: process.env.TOKEN_EXPIRE_TIME,
+        secret,
+      }),
+      refresh_token: this.jwtService.sign(payload, {
+        expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
+        secret,
+      }),
     };
   }
 

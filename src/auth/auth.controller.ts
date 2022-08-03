@@ -2,10 +2,10 @@ import {
   Controller,
   Post,
   Body,
-  // UseGuards,
-  // Request,
-  // HttpCode,
-  // HttpStatus,
+  UseGuards,
+  Request,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -13,9 +13,9 @@ import {
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiUnauthorizedResponse,
+  // ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-// import { LocalAuthGuard } from './local-auth.guard';
+import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 // import { RefreshDto } from './dto/refresh.dto.';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
@@ -37,27 +37,27 @@ export class AuthController {
     return this.authService.signUp(createUserDto);
   }
 
-  // @Public()
-  // @UseGuards(LocalAuthGuard)
-  // @Post('login')
-  // @ApiOkResponse({ description: 'User was successfully logined' })
-  // @ApiNotFoundResponse({
-  //   description: 'Invalid credentials has been provided',
-  // })
-  // @ApiForbiddenResponse({
-  //   description: "user with such login, password doesn't extist",
-  // })
-  // @HttpCode(HttpStatus.OK)
-  // async login(@Request() req) {
-  //   const { access_token, refresh_token } = await this.authService.login(
-  //     req.user,
-  //   );
+  @Public()
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  @ApiOkResponse({ description: 'User was successfully logined' })
+  @ApiNotFoundResponse({
+    description: 'Invalid credentials has been provided',
+  })
+  @ApiForbiddenResponse({
+    description: "user with such login, password doesn't extist",
+  })
+  @HttpCode(HttpStatus.OK)
+  async login(@Request() req) {
+    const { access_token, refresh_token } = await this.authService.login(
+      req.user,
+    );
 
-  //   return {
-  //     accessToken: access_token,
-  //     refreshToken: refresh_token,
-  //   };
-  // }
+    return {
+      accessToken: access_token,
+      refreshToken: refresh_token,
+    };
+  }
 
   // @Post('refresh')
   // @ApiOkResponse({ description: 'Token was successfully refreshed' })
