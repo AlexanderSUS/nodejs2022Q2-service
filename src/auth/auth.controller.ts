@@ -13,11 +13,11 @@ import {
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
-  // ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
-// import { RefreshDto } from './dto/refresh.dto.';
+import { RefreshDto } from './dto/refresh.dto.';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Public } from './public.decorator';
 
@@ -59,13 +59,13 @@ export class AuthController {
     };
   }
 
-  // @Post('refresh')
-  // @ApiOkResponse({ description: 'Token was successfully refreshed' })
-  // @ApiUnauthorizedResponse({
-  //   description: 'Refresh token is invalid or expired',
-  // })
-  // @HttpCode(HttpStatus.OK)
-  // refresh(@Body() refreshDto: RefreshDto) {
-  //   return this.authService.refresh(refreshDto);
-  // }
+  @Post('refresh')
+  @ApiOkResponse({ description: 'Token was successfully refreshed' })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+  })
+  @HttpCode(HttpStatus.OK)
+  refresh(@Body() refreshDto: RefreshDto) {
+    return this.authService.refresh(refreshDto);
+  }
 }

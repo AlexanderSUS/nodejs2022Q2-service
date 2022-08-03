@@ -20,6 +20,9 @@ export class UserEntity {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  refreshTokenHash: string;
+
   @VersionColumn()
   version: number; // integer number, increments on update
 

@@ -46,7 +46,13 @@ export class UserService {
     return user;
   }
 
-  async update(id: string, updatePasswordDto: UpdatePasswordDto) {
+  async updateRefreshToken(id: string, refreshTokenHash: string) {
+    const user = await this.userRepository.findOneBy({ id });
+
+    await this.userRepository.save({ ...user, refreshTokenHash });
+  }
+
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
     const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {

@@ -65,7 +65,7 @@ export class UserController {
     id: string,
     @Body() updateUserDto: UpdatePasswordDto,
   ) {
-    return this.userService.update(id, updateUserDto);
+    return this.userService.updatePassword(id, updateUserDto);
   }
 
   @Delete(':id')
