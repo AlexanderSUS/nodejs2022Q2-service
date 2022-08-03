@@ -123,7 +123,7 @@ export class FavouritesService {
     return emptyFavourites;
   }
 
-  async removeAritst(id: string) {
+  async removeArtist(id: string) {
     const entity = await this.artistsRepository.findOneBy({ id });
 
     if (!entity) {
