@@ -1,4 +1,12 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  // UseGuards,
+  // Request,
+  // HttpCode,
+  // HttpStatus,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -7,17 +15,18 @@ import {
   ApiOkResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+// import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 // import { RefreshDto } from './dto/refresh.dto.';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Public } from './public.decorator';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @Post('auth/signup')
+  @Post('signup')
   @ApiCreatedResponse({
     description: 'User was successfully signed up',
   })
@@ -28,6 +37,8 @@ export class AuthController {
     return this.authService.signUp(createUserDto);
   }
 
+  // @Public()
+  // @UseGuards(LocalAuthGuard)
   // @Post('login')
   // @ApiOkResponse({ description: 'User was successfully logined' })
   // @ApiNotFoundResponse({
@@ -37,11 +48,18 @@ export class AuthController {
   //   description: "user with such login, password doesn't extist",
   // })
   // @HttpCode(HttpStatus.OK)
-  // login(@Body() loginDto: CreateUserDto) {
-  //   return this.authService.login(loginDto);
+  // async login(@Request() req) {
+  //   const { access_token, refresh_token } = await this.authService.login(
+  //     req.user,
+  //   );
+
+  //   return {
+  //     accessToken: access_token,
+  //     refreshToken: refresh_token,
+  //   };
   // }
 
-  // @Post('auth/refresh')
+  // @Post('refresh')
   // @ApiOkResponse({ description: 'Token was successfully refreshed' })
   // @ApiUnauthorizedResponse({
   //   description: 'Refresh token is invalid or expired',
