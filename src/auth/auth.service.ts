@@ -1,11 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { RefreshDto } from './dto/refresh.dto.';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import * as bycrypt from 'bcrypt';
 import { IUser } from 'src/user/interfaces/user.interface';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { JwtDecodeReturnType } from './dto/jwtDecodeReturnType.dts';
 
 @Injectable()
 export class AuthService {
@@ -69,12 +67,16 @@ export class AuthService {
     return tokens;
   }
 
-  async refresh({ refreshToken }: RefreshDto) {
-    const { userId, login } = this.jwtService.decode(
-      refreshToken,
-    ) as JwtDecodeReturnType;
-
-    const { refreshTokenHash } = await this.userService.findOne(userId);
+  async refresh({
+    id,
+    login,
+    refreshToken,
+  }: {
+    id: string;
+    login: string;
+    refreshToken: string;
+  }) {
+    const { refreshTokenHash } = await this.userService.findOne(id);
 
     if (!refreshTokenHash) {
       throw new HttpException('Not authorized', HttpStatus.FORBIDDEN);
@@ -89,14 +91,14 @@ export class AuthService {
       throw new HttpException('Not authorized', HttpStatus.FORBIDDEN);
     }
 
-    const tokens = this.getTokens({ login, userId });
+    const tokens = this.getTokens({ login, userId: id });
 
     const newRefreshTokenHash = await bycrypt.hash(
       tokens.refresh_token,
       parseInt(process.env.CRYPT_SALT),
     );
 
-    await this.userService.updateRefreshToken(userId, newRefreshTokenHash);
+    await this.userService.updateRefreshToken(id, newRefreshTokenHash);
 
     return tokens;
   }
