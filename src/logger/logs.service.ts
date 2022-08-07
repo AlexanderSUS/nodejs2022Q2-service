@@ -6,9 +6,7 @@ import { LogData } from './types/logData';
 
 @Injectable()
 export default class LogsService {
-  constructor(private readonly configService: ConfigService) {
-    this.configService = configService;
-  }
+  constructor(private readonly configService: ConfigService) {}
 
   async saveLog({ message, context, level }: LogData) {
     const BYTE_PER_CHAR = 2;
@@ -23,6 +21,28 @@ export default class LogsService {
     await appendFile(
       path.resolve(
         logDir,
+        fileSize + logString.length * BYTE_PER_CHAR > maxFileSize
+          ? `${fileName}${Date.now()}.txt`
+          : lastModifiedFile,
+      ),
+      logString,
+    );
+  }
+
+  async saveError({ message, context, level }: LogData) {
+    const maxFileSize = this.configService.get('logFileMaxSize');
+    const errorDir = this.configService.get('errDir');
+    const fileName = this.configService.get('logFileName');
+    const BYTE_PER_CHAR = 2;
+    const logString = `${level} ${context} ${message}\n`;
+
+    const lastModifiedFile = (await readdir(errorDir)).sort().pop();
+    const fileSize = (await lstat(path.resolve(errorDir, lastModifiedFile)))
+      .size;
+
+    await appendFile(
+      path.resolve(
+        errorDir,
         fileSize + logString.length * BYTE_PER_CHAR > maxFileSize
           ? `${fileName}${Date.now()}.txt`
           : lastModifiedFile,

@@ -39,7 +39,7 @@ class CustomLogger extends ConsoleLogger {
   error(message: string, stack?: string, context?: string) {
     super.error.apply(this, [message, stack, context]);
 
-    this.logsService.saveLog({
+    this.logsService.saveError({
       message,
       context,
       level: 'error',
@@ -52,7 +52,7 @@ class CustomLogger extends ConsoleLogger {
     this.logsService.saveLog({
       message,
       context,
-      level: 'error',
+      level: 'warn',
     });
   }
 
@@ -62,7 +62,7 @@ class CustomLogger extends ConsoleLogger {
     this.logsService.saveLog({
       message,
       context,
-      level: 'error',
+      level: 'debug',
     });
   }
 
@@ -72,7 +72,7 @@ class CustomLogger extends ConsoleLogger {
     this.logsService.saveLog({
       message,
       context,
-      level: 'error',
+      level: 'verbose',
     });
   }
 }
