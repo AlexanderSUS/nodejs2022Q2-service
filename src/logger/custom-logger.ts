@@ -67,7 +67,7 @@ class CustomLogger extends ConsoleLogger {
   }
 
   verbose(message: string, context?: string) {
-    super.debug.apply(this, [message, context]);
+    super.verbose.apply(this, [message, context]);
 
     this.logsService.saveLog({
       message,
