@@ -10,11 +10,15 @@ export class LoggerMiddleware implements NestMiddleware {
   use(request: Request, response: Response, next: NextFunction): void {
     const { originalUrl, method, query, body } = request;
 
+    console.log('BODY', { ...body });
+
     response.on('finish', () => {
       const { statusCode } = response;
-      const contentLength = response.get('content-length');
+      // const contentLength = response.get('content-length');
 
-      const log = `Time: ${new Date().toISOString()}, ${method} ${originalUrl} ${query} ${body}. Response: status code ${statusCode}, content length: ${contentLength}`;
+      const log = `Time: ${new Date().toISOString()}, ${method} ${originalUrl} query=${JSON.stringify(
+        query,
+      )} body=${JSON.stringify(body)}. Response: status code ${statusCode}`;
 
       this.logger.log(log);
       this.loggerService.saveLog({
