@@ -17,7 +17,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { CustomLoggerModule } from './logger/logger.module';
-import { HttpExceptionFilter } from './logger/exeptionsLoggerFilter';
+import { AllExceptionFilter } from './logger/allExceptionsFilter';
 
 @Module({
   imports: [
@@ -41,7 +41,7 @@ import { HttpExceptionFilter } from './logger/exeptionsLoggerFilter';
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     {
       provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
+      useClass: AllExceptionFilter,
     },
   ],
 })

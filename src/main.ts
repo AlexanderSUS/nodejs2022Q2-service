@@ -4,7 +4,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import CustomLogger from './logger/custom-logger';
-import { HttpExceptionFilter } from './logger/exeptionsLoggerFilter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -16,8 +15,6 @@ async function bootstrap() {
   app.useLogger(customLogger);
 
   const config = app.get(ConfigService);
-
-  app.useGlobalFilters(new HttpExceptionFilter(customLogger));
 
   const docConfig = new DocumentBuilder()
     .setTitle('Home Library Service')
