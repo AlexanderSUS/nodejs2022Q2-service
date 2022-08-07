@@ -14,7 +14,7 @@ export class LoggerMiddleware implements NestMiddleware {
       const { statusCode } = response;
       const contentLength = response.get('content-length');
 
-      const log = `${method} ${originalUrl} ${query} ${body}. Response: status code ${statusCode}, content length: ${contentLength}`;
+      const log = `Time: ${new Date().toISOString()}, ${method} ${originalUrl} ${query} ${body}. Response: status code ${statusCode}, content length: ${contentLength}`;
 
       this.logger.log(log);
       this.loggerService.saveLog({

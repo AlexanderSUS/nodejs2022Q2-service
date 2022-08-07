@@ -16,6 +16,8 @@ class CustomLogger extends ConsoleLogger {
   ) {
     const logLevel = configService.get('logLevel');
 
+    console.log('LOG LEVEL', logLevel);
+
     super(context, {
       ...options,
       logLevels: getLogLevels(logLevel),
