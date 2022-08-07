@@ -5,6 +5,6 @@ export const configuration = () => {
     logFileMaxSize: process.env.LOG_FILE_MAX_SIZE,
     errDir: process.env.ERR_DIR,
     logDir: process.env.LOG_DIR,
-    logFileName: process.env.LOG_FILE_NAME,
+    logsFolder: process.env.LOGS_FOLDER,
   };
 };
