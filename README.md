@@ -10,7 +10,7 @@
 - Docker - [Download & Install Docker](https://docs.docker.com/get-docker/)
 
 ## Installing
-1. Clone this repo
+1. Clone this repository
 
 ```
 git clone git@github.com:AlexanderSUS/graphql-service.git
@@ -19,40 +19,45 @@ git clone git@github.com:AlexanderSUS/graphql-service.git
 ```
 cd nodejs2022Q2-service
 ```
-4. Switch baranch
+4. Switch branch
 ```
 git checkout develop
 ```
-4. Install npm modules
+4. Install npm modules. This step is needed for running tests 
+
 ```
 npm install
 ```
 5. Rename file `.env.example` to `.env` at src folder
 
-## Running application as is
+6. To run application you should install [Docker](https://docs.docker.com/get-docker/)
 
-**Production mode**
 
-```
-npm run start
-```
+## Running application
 
-**Development mode**
+Application will run in docker containers in development mode.
 
-```
-npm run start:dev
-```
-
-## Running application in docker container (development mode)
-
-Run command
-
+First you need to create two images, one for the application and one for database. 
+For that in folder with `docker-comose.yml` file run command
 ```
 docker compose up
 ```
+After that you'll see message 'Listening at http://loaclhost: 4000' in console, that means  application and database successfully started. If you got an error be sure that you performed step 5 at Installation section.
+
+The database now has no any entity and you should generate and run migration.
+For generate migration open another console window and run command
+```
+docker exec app npm run migration:generate
+```
+This command will generate migration that you can find in `dist/migrations/` folder.
+
+To run migration run command
+```
+docker exec app npm run migration:run
+```
+After that database will updated and application will be ready to use or running tests
 
 To stop docker container run command
-
 ```
 docker compose down
 ```

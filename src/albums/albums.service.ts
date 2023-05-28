@@ -1,27 +1,27 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DbStoreKey } from 'src/const/enum';
-import { DbService } from 'src/db/db.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { AlbumEntity } from './entities/album.entity';
 
 @Injectable()
 export class AlbumsService {
-  constructor(private readonly DbService: DbService) {}
+  constructor(
+    @InjectRepository(AlbumEntity)
+    private albumRepository: Repository<AlbumEntity>,
+  ) {}
 
-  async create(createAlbumDto: CreateAlbumDto) {
-    return this.DbService.create({
-      dto: createAlbumDto,
-      type: DbStoreKey.albums,
-    }) as Promise<AlbumEntity>;
+  create(createAlbumDto: CreateAlbumDto) {
+    return this.albumRepository.save(createAlbumDto);
   }
 
   findAll() {
-    return this.DbService.findAll(DbStoreKey.albums);
+    return this.albumRepository.find();
   }
 
-  findOne(id: string) {
-    const album = this.DbService.findOne(id, DbStoreKey.albums);
+  async findOne(id: string) {
+    const album = await this.albumRepository.findOneBy({ id });
 
     if (!album) {
       throw new HttpException('Album Not found', HttpStatus.NOT_FOUND);
@@ -30,24 +30,23 @@ export class AlbumsService {
     return album;
   }
 
-  update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const result = this.DbService.update(id, {
-      dto: updateAlbumDto,
-      type: DbStoreKey.albums,
-    });
+  async update(id: string, updateAlbumDto: UpdateAlbumDto) {
+    const album = await this.albumRepository.findOneBy({ id });
 
-    if (!result) {
-      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+    if (!album) {
+      throw new HttpException('Album Not found', HttpStatus.NOT_FOUND);
     }
 
-    return result;
+    return this.albumRepository.save({ ...album, ...updateAlbumDto });
   }
 
-  remove(id: string) {
-    const isFound = this.DbService.remove(id, DbStoreKey.albums);
+  async remove(id: string) {
+    const album = await this.albumRepository.findOneBy({ id });
 
-    if (!isFound) {
-      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+    if (!album) {
+      throw new HttpException('Arits not found', HttpStatus.NOT_FOUND);
     }
+
+    await this.albumRepository.remove(album);
   }
 }

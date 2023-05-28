@@ -17,16 +17,13 @@ import {
 } from '@nestjs/swagger';
 import { FavouritesService } from './favourites.service';
 import parseUuidOptions from 'src/const/uuid';
-import { DbStoreKey } from '../const/enum';
 import { TrackEntity } from 'src/tracks/entities/track.entity';
 import { AlbumEntity } from 'src/albums/entities/album.entity';
 import { ArtistEntity } from 'src/artists/entities/artist.entity';
-import { Store } from 'src/db/dto/strore.dto';
 
 @Controller('favs')
 export class FavouritesController {
   constructor(private readonly favouritesService: FavouritesService) {}
-
   @Post('track/:id')
   @ApiCreatedResponse({
     description: 'Aritst was created succesfully',
@@ -55,10 +52,7 @@ export class FavouritesController {
   }
 
   @Get()
-  @ApiOkResponse({
-    description: 'Return Favourites object',
-    type: Store,
-  })
+  @ApiOkResponse({ description: 'Return Favourites object' })
   findAll() {
     return this.favouritesService.findAll();
   }
@@ -69,7 +63,7 @@ export class FavouritesController {
   @ApiBadRequestResponse({ description: 'Invalid Aritst ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
   removeAritst(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.favouritesService.remove(id, DbStoreKey.artists);
+    return this.favouritesService.removeAritst(id);
   }
 
   @Delete('album/:id')
@@ -78,7 +72,7 @@ export class FavouritesController {
   @ApiBadRequestResponse({ description: 'Invalid Album ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
   removeAlbum(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.favouritesService.remove(id, DbStoreKey.albums);
+    return this.favouritesService.removeAlbum(id);
   }
 
   @Delete('track/:id')
@@ -87,6 +81,6 @@ export class FavouritesController {
   @ApiBadRequestResponse({ description: 'Invalid Aritst ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
   removeTrack(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.favouritesService.remove(id, DbStoreKey.tracks);
+    return this.favouritesService.removeTrack(id);
   }
 }

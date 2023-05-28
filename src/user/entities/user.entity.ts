@@ -1,8 +1,35 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Generated,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  VersionColumn,
+} from 'typeorm';
+
+@Entity()
 export class UserEntity {
-  readonly id: string; // uuid v4
-  readonly login: string;
-  readonly password: string;
-  readonly version: number; // integer number, increments on update
-  readonly createdAt: number; // timestamp of creation
-  readonly updatedAt: number; // timestamp of last update
+  @PrimaryGeneratedColumn()
+  @Generated('uuid')
+  id: string; // uuid v4
+
+  @Column()
+  login: string;
+
+  @Column()
+  password: string;
+
+  @VersionColumn()
+  version: number; // integer number, increments on update
+
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  createdAt: number; // timestamp of creation
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+  })
+  updatedAt: number; // timestamp of last update
 }

@@ -33,7 +33,7 @@ export class UserController {
     type: UserResponse,
   })
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto) as Promise<UserResponse>;
+    return this.userService.create(createUserDto);
   }
 
   @Get()
@@ -42,7 +42,7 @@ export class UserController {
     type: Array<UserResponse>,
   })
   findAlll() {
-    return this.userService.findAll() as Promise<UserResponse[]>;
+    return this.userService.findAll();
   }
 
   @Get(':id')
@@ -50,7 +50,7 @@ export class UserController {
   @ApiNotFoundResponse({ description: 'User does not exits' })
   @ApiBadRequestResponse({ description: 'Invalid user ID' })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.userService.findOne(id) as Promise<UserResponse>;
+    return this.userService.findOne(id);
   }
 
   @Put(':id')
@@ -65,7 +65,7 @@ export class UserController {
     id: string,
     @Body() updateUserDto: UpdatePasswordDto,
   ) {
-    return this.userService.update(id, updateUserDto) as Promise<UserResponse>;
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')

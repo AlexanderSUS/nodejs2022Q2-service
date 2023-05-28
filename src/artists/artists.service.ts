@@ -1,26 +1,27 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DbStoreKey } from 'src/const/enum';
-import { DbService } from 'src/db/db.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { ArtistEntity } from './entities/artist.entity';
 
 @Injectable()
 export class ArtistsService {
-  constructor(private readonly DbService: DbService) {}
+  constructor(
+    @InjectRepository(ArtistEntity)
+    private artistRepository: Repository<ArtistEntity>,
+  ) {}
 
   create(createArtistDto: CreateArtistDto) {
-    return this.DbService.create({
-      dto: createArtistDto,
-      type: DbStoreKey.artists,
-    });
+    return this.artistRepository.save(createArtistDto);
   }
 
   findAll() {
-    return this.DbService.findAll(DbStoreKey.artists);
+    return this.artistRepository.find();
   }
 
-  findOne(id: string) {
-    const artist = this.DbService.findOne(id, DbStoreKey.artists);
+  async findOne(id: string) {
+    const artist = await this.artistRepository.findOneBy({ id });
 
     if (!artist) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
@@ -29,24 +30,23 @@ export class ArtistsService {
     return artist;
   }
 
-  update(id: string, updateArtistDto: UpdateArtistDto) {
-    const result = this.DbService.update(id, {
-      dto: updateArtistDto,
-      type: DbStoreKey.artists,
-    });
+  async update(id: string, updateArtistDto: UpdateArtistDto) {
+    const artist = await this.artistRepository.findOneBy({ id });
 
-    if (!result) {
+    if (!artist) {
       throw new HttpException('Aritst not found', HttpStatus.NOT_FOUND);
     }
 
-    return result;
+    return this.artistRepository.save({ ...artist, ...updateArtistDto });
   }
 
-  remove(id: string) {
-    const isFound = this.DbService.remove(id, DbStoreKey.artists);
+  async remove(id: string) {
+    const artist = await this.artistRepository.findOneBy({ id });
 
-    if (!isFound) {
+    if (!artist) {
       throw new HttpException('Arits not found', HttpStatus.NOT_FOUND);
     }
+
+    await this.artistRepository.remove(artist);
   }
 }
