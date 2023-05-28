@@ -8,6 +8,8 @@ import { FavouritesModule } from './favourites/favourites.module';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from './config/configuration';
 import { validationSchema } from './config/validation';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -23,5 +25,7 @@ import { validationSchema } from './config/validation';
       validationSchema,
     }),
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
