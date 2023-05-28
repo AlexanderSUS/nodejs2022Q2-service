@@ -21,7 +21,7 @@ cd nodejs2022Q2-service
 ```
 4. Switch branch
 ```
-git checkout develop
+git checkout auth
 ```
 4. Install npm modules. This step is needed for running tests 
 

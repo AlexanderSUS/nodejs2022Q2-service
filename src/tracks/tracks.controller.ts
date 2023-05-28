@@ -29,7 +29,7 @@ export class TracksController {
 
   @Post()
   @ApiCreatedResponse({
-    description: 'Aritst was created succesfully',
+    description: 'Artist was created succesfully',
     type: TrackEntity,
   })
   create(@Body() createTrackDto: CreateTrackDto) {
@@ -38,7 +38,7 @@ export class TracksController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Return Aritst array or emty array',
+    description: 'Return Artist array or emty array',
     type: Array<TrackEntity>,
   })
   findAll() {
@@ -46,20 +46,20 @@ export class TracksController {
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Return Aritst by ID', type: TrackEntity })
-  @ApiNotFoundResponse({ description: 'Aritst does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Aritst ID' })
+  @ApiOkResponse({ description: 'Return Artist by ID', type: TrackEntity })
+  @ApiNotFoundResponse({ description: 'Artist does not exits' })
+  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.tracksService.findOne(id);
   }
 
   @Put(':id')
   @ApiOkResponse({
-    description: 'Update Aritst and return this Aritst',
+    description: 'Update Artist and return this Artist',
     type: TrackEntity,
   })
-  @ApiNotFoundResponse({ description: 'Aritst does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Aritst ID' })
+  @ApiNotFoundResponse({ description: 'Artist does not exits' })
+  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
@@ -68,9 +68,9 @@ export class TracksController {
   }
 
   @Delete(':id')
-  @ApiNoContentResponse({ description: 'Aritst was removed' })
-  @ApiNotFoundResponse({ description: 'Aritst does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Aritst ID' })
+  @ApiNoContentResponse({ description: 'Artist was removed' })
+  @ApiNotFoundResponse({ description: 'Artist does not exits' })
+  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.tracksService.remove(id);

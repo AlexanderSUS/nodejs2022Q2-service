@@ -26,7 +26,7 @@ export class FavouritesController {
   constructor(private readonly favouritesService: FavouritesService) {}
   @Post('track/:id')
   @ApiCreatedResponse({
-    description: 'Aritst was created succesfully',
+    description: 'Artist was created succesfully',
     type: TrackEntity,
   })
   addTrack(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
@@ -35,7 +35,7 @@ export class FavouritesController {
 
   @Post('album/:id')
   @ApiCreatedResponse({
-    description: 'Aritst was created succesfully',
+    description: 'Artist was created succesfully',
     type: AlbumEntity,
   })
   addAlbum(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
@@ -44,7 +44,7 @@ export class FavouritesController {
 
   @Post('artist/:id')
   @ApiCreatedResponse({
-    description: 'Aritst was created succesfully',
+    description: 'Artist was created succesfully',
     type: ArtistEntity,
   })
   addArtist(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
@@ -58,12 +58,12 @@ export class FavouritesController {
   }
 
   @Delete('artist/:id')
-  @ApiNoContentResponse({ description: 'Aritst was removed from favourites' })
-  @ApiNotFoundResponse({ description: 'Aritst does not exits in favourtes' })
-  @ApiBadRequestResponse({ description: 'Invalid Aritst ID' })
+  @ApiNoContentResponse({ description: 'Artist was removed from favourites' })
+  @ApiNotFoundResponse({ description: 'Artist does not exits in favourtes' })
+  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeAritst(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.favouritesService.removeAritst(id);
+  removeArtist(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
+    return this.favouritesService.removeArtist(id);
   }
 
   @Delete('album/:id')
@@ -76,9 +76,9 @@ export class FavouritesController {
   }
 
   @Delete('track/:id')
-  @ApiNoContentResponse({ description: 'Aritst was removed from favourites' })
-  @ApiNotFoundResponse({ description: 'Aritst does not exits in favourtes' })
-  @ApiBadRequestResponse({ description: 'Invalid Aritst ID' })
+  @ApiNoContentResponse({ description: 'Artist was removed from favourites' })
+  @ApiNotFoundResponse({ description: 'Artist does not exits in favourtes' })
+  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
   removeTrack(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.favouritesService.removeTrack(id);
