@@ -3,9 +3,17 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import CustomLogger from './logger/custom-logger';
+import './utils/externalErrorLoger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: false,
+  });
+
+  const customLogger = app.get(CustomLogger);
+
+  app.useLogger(customLogger);
 
   const config = app.get(ConfigService);
 
