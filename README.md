@@ -1,5 +1,8 @@
 # Home Library Service
 
+## Endpoints
+  You can find endpoints for this application in [task assignments](https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/authentication/assignment.md)
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
@@ -21,6 +24,7 @@ cd nodejs2022Q2-service
 git checkout develop
 ```
 4. Install npm modules. This step is needed for running tests 
+
 ```
 npm install
 ```
