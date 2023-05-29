@@ -63,7 +63,7 @@ docker compose down
 ```
 ### Vulnerability scanning
 
-After `docker copose up` command will be completed you can scan built images for vulnerabilities
+After `docker compose up` command will be completed you can scan built images for vulnerabilities
 
 with command
 
