@@ -141,7 +141,7 @@ export class FavoritesService {
 
     if (!favorite) {
       throw new HttpException(
-        'Entity does not exits in favortes',
+        'Entity does not exits in favorites',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -169,7 +169,7 @@ export class FavoritesService {
 
     if (!favorite) {
       throw new HttpException(
-        'Entity does not exits in favortes',
+        'Entity does not exits in favorites',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -197,7 +197,7 @@ export class FavoritesService {
 
     if (!favorite) {
       throw new HttpException(
-        'Track does not exits in favortes',
+        'Track does not exits in favorites',
         HttpStatus.NOT_FOUND,
       );
     }
