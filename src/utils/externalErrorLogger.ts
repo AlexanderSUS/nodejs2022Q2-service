@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import 'dotenv/config';
 
-export const exterlalLoger = process
+export const externalLogger = process
   .on('unhandledRejection', (reason, p) => {
     const logString = `${reason}, Unhandled Rejection at Promise', ${p}`;
     const BYTE_PER_CHAR = 2;

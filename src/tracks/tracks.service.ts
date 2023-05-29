@@ -44,7 +44,7 @@ export class TracksService {
     const track = await this.trackRepository.findOneBy({ id });
 
     if (!track) {
-      throw new HttpException('Arits not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
 
     await this.trackRepository.remove(track);

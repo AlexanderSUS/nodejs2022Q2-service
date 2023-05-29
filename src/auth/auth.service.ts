@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import * as bycrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import { IUser } from 'src/user/interfaces/user.interface';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -15,7 +15,7 @@ export class AuthService {
   async validateUser(login: string, pass: string): Promise<IUser | null> {
     const user = await this.userService.findOneByLogin(login);
 
-    const isPasswordMatch = await bycrypt.compare(pass, user.password);
+    const isPasswordMatch = await bcrypt.compare(pass, user.password);
 
     if (user && isPasswordMatch) {
       const { password, ...result } = user;
@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   async signUp(createUserDto: CreateUserDto) {
-    const password = await bycrypt.hash(
+    const password = await bcrypt.hash(
       createUserDto.password,
       parseInt(process.env.CRYPT_SALT),
     );
@@ -57,7 +57,7 @@ export class AuthService {
       userId: user.id,
     });
 
-    const refreshTokenHash = await bycrypt.hash(
+    const refreshTokenHash = await bcrypt.hash(
       tokens.refresh_token,
       parseInt(process.env.CRYPT_SALT),
     );
@@ -82,10 +82,7 @@ export class AuthService {
       throw new HttpException('Not authorized', HttpStatus.FORBIDDEN);
     }
 
-    const isRefreshMatch = await bycrypt.compare(
-      refreshToken,
-      refreshTokenHash,
-    );
+    const isRefreshMatch = await bcrypt.compare(refreshToken, refreshTokenHash);
 
     if (!isRefreshMatch) {
       throw new HttpException('Not authorized', HttpStatus.FORBIDDEN);
@@ -93,7 +90,7 @@ export class AuthService {
 
     const tokens = this.getTokens({ login, userId: id });
 
-    const newRefreshTokenHash = await bycrypt.hash(
+    const newRefreshTokenHash = await bcrypt.hash(
       tokens.refresh_token,
       parseInt(process.env.CRYPT_SALT),
     );

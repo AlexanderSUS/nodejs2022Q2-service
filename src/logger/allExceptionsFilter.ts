@@ -34,7 +34,7 @@ export class AllExceptionFilter implements ExceptionFilter {
       this.customLogger.error(
         errorLogMessage,
         exception.stack,
-        'HttpExeptionFilter',
+        'HttpExceptionFilter',
       );
 
       response.status(status).json(errorLog);
@@ -53,7 +53,7 @@ export class AllExceptionFilter implements ExceptionFilter {
       this.customLogger.error(
         JSON.stringify(responseBody),
         exception.stack ? exception.stack : null,
-        'UnhandledExeptionFilter',
+        'UnhandledExceptionFilter',
       );
 
       httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

@@ -29,7 +29,7 @@ export class UserController {
 
   @Post()
   @ApiCreatedResponse({
-    description: 'User was created succesfully',
+    description: 'User was created successfully',
     type: UserResponse,
   })
   create(@Body() createUserDto: CreateUserDto) {
@@ -38,7 +38,7 @@ export class UserController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Return user array or emty array',
+    description: 'Return user array or empty array',
     type: Array<UserResponse>,
   })
   findAlll() {

@@ -45,7 +45,7 @@ export class AuthController {
     description: 'Invalid credentials has been provided',
   })
   @ApiForbiddenResponse({
-    description: "user with such login, password doesn't extist",
+    description: "user with such login, password doesn't exist",
   })
   @HttpCode(HttpStatus.OK)
   async login(@Request() req) {

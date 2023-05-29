@@ -5,7 +5,7 @@ import { UserModule } from './user/user.module';
 import { ArtistsModule } from './artists/artists.module';
 import { AlbumsModule } from './albums/albums.module';
 import { TracksModule } from './tracks/tracks.module';
-import { FavouritesModule } from './favourites/favourites.module';
+import { FavoritesModule } from './favorites/favorites.module';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from './config/configuration';
 import { validationSchema } from './config/validation';
@@ -25,7 +25,7 @@ import { AllExceptionFilter } from './logger/allExceptionsFilter';
     ArtistsModule,
     AlbumsModule,
     TracksModule,
-    FavouritesModule,
+    FavoritesModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],

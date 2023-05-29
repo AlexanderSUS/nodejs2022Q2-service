@@ -1,6 +1,6 @@
 import { UserEntity } from 'src/user/entities/user.entity';
 
-const handleUserForResonse = (user: UserEntity) => {
+const handleUserForResponse = (user: UserEntity) => {
   user.createdAt = new Date(user.createdAt).getTime();
   user.updatedAt = new Date(user.updatedAt).getTime();
 
@@ -9,4 +9,4 @@ const handleUserForResonse = (user: UserEntity) => {
   return user;
 };
 
-export default handleUserForResonse;
+export default handleUserForResponse;
