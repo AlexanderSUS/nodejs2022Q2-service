@@ -20,6 +20,7 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Public } from './public.decorator';
 import { RefreshAuthGuard } from './refresh-auth.guard';
+import { RequestWithUser } from './interface/request-with-user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -33,7 +34,7 @@ export class AuthController {
   @ApiBadRequestResponse({
     description: 'Invalid credentials has been provided',
   })
-  singup(@Body() createUserDto: CreateUserDto) {
+  signUp(@Body() createUserDto: CreateUserDto) {
     return this.authService.signUp(createUserDto);
   }
 
@@ -48,10 +49,8 @@ export class AuthController {
     description: "user with such login, password doesn't exist",
   })
   @HttpCode(HttpStatus.OK)
-  async login(@Request() req) {
-    const { access_token, refresh_token } = await this.authService.login(
-      req.user,
-    );
+  async login(@Request() { user }: RequestWithUser) {
+    const { access_token, refresh_token } = await this.authService.login(user);
 
     return {
       accessToken: access_token,
