@@ -67,7 +67,14 @@ export class AuthController {
     description: 'Refresh token is invalid or expired',
   })
   @HttpCode(HttpStatus.OK)
-  refresh(@Request() req) {
-    return this.authService.refresh(req.user);
+  async refresh(@Request() req) {
+    const { access_token, refresh_token } = await this.authService.refresh(
+      req.user,
+    );
+
+    return {
+      accessToken: access_token,
+      refreshToken: refresh_token,
+    };
   }
 }
