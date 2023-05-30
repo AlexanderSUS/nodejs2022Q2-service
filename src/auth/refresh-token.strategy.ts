@@ -3,13 +3,14 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { jwtModuleOptions } from 'src/config/jwtModuleOptions';
 import { Request } from 'express';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,
   'refresh',
 ) {
-  constructor() {
+  constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
       secretOrKey: jwtModuleOptions.secret,
@@ -17,11 +18,10 @@ export class RefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(req: Request, payload: any) {
-    return {
-      id: payload.userId,
-      login: payload.login,
-      refreshToken: req.body.refreshToken,
-    };
+  validate(req: Request, payload: any) {
+    return this.authService.getUserIfRefreshTokenMatches(
+      req.body.refreshToken,
+      payload.id,
+    );
   }
 }

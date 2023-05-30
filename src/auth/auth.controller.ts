@@ -50,12 +50,7 @@ export class AuthController {
   })
   @HttpCode(HttpStatus.OK)
   async login(@Request() { user }: RequestWithUser) {
-    const { access_token, refresh_token } = await this.authService.login(user);
-
-    return {
-      accessToken: access_token,
-      refreshToken: refresh_token,
-    };
+    return this.authService.login(user);
   }
 
   @Public()
@@ -66,14 +61,7 @@ export class AuthController {
     description: 'Refresh token is invalid or expired',
   })
   @HttpCode(HttpStatus.OK)
-  async refresh(@Request() req) {
-    const { access_token, refresh_token } = await this.authService.refresh(
-      req.user,
-    );
-
-    return {
-      accessToken: access_token,
-      refreshToken: refresh_token,
-    };
+  refresh(@Request() { user }: RequestWithUser) {
+    return this.authService.refresh(user);
   }
 }

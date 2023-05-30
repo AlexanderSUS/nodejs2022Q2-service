@@ -18,6 +18,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { CustomLoggerModule } from './logger/logger.module';
 import { AllExceptionFilter } from './logger/allExceptionsFilter';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AllExceptionFilter } from './logger/allExceptionsFilter';
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
     CustomLoggerModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [

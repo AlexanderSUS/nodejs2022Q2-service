@@ -9,6 +9,8 @@ import {
   ParseUUIDPipe,
   HttpStatus,
   HttpCode,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import {
   ApiOkResponse,
@@ -24,6 +26,7 @@ import { UpdatePasswordDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -41,7 +44,7 @@ export class UserController {
     description: 'Return user array or empty array',
     type: Array<UserResponse>,
   })
-  findAlll() {
+  findAll() {
     return this.userService.findAll();
   }
 
