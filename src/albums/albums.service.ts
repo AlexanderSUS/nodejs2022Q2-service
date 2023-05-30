@@ -1,52 +1,29 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { Album } from './entities/album.entity';
+import { AlbumsRepository } from './albums.repository';
 
 @Injectable()
 export class AlbumsService {
-  constructor(
-    @InjectRepository(Album)
-    private albumRepository: Repository<Album>,
-  ) {}
+  constructor(private readonly albumRepository: AlbumsRepository) {}
 
   create(createAlbumDto: CreateAlbumDto) {
-    return this.albumRepository.save(createAlbumDto);
+    return this.albumRepository.create(createAlbumDto);
   }
 
   findAll() {
-    return this.albumRepository.find();
+    return this.albumRepository.getAll();
   }
 
-  async findOne(id: string) {
-    const album = await this.albumRepository.findOneBy({ id });
-
-    if (!album) {
-      throw new HttpException('Album Not found', HttpStatus.NOT_FOUND);
-    }
-
-    return album;
+  findOne(id: string) {
+    return this.albumRepository.getById(id);
   }
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const album = await this.albumRepository.findOneBy({ id });
-
-    if (!album) {
-      throw new HttpException('Album Not found', HttpStatus.NOT_FOUND);
-    }
-
-    return this.albumRepository.save({ ...album, ...updateAlbumDto });
+    return this.albumRepository.update(id, updateAlbumDto);
   }
 
   async remove(id: string) {
-    const album = await this.albumRepository.findOneBy({ id });
-
-    if (!album) {
-      throw new HttpException('Arits not found', HttpStatus.NOT_FOUND);
-    }
-
-    await this.albumRepository.remove(album);
+    return this.albumRepository.remove(id);
   }
 }

@@ -13,5 +13,5 @@ export class CreateAlbumDto {
   @ApiProperty()
   @IsOptional()
   @IsUUID('4')
-  artistId: string | null; // refers to Artist
+  artistId: string; // refers to Artist
 }
