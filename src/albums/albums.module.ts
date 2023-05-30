@@ -9,5 +9,6 @@ import { AlbumsRepository } from './albums.repository';
   imports: [TypeOrmModule.forFeature([Album])],
   controllers: [AlbumsController],
   providers: [AlbumsService, AlbumsRepository],
+  exports: [AlbumsService],
 })
 export class AlbumsModule {}

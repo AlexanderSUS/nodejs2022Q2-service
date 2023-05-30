@@ -14,7 +14,7 @@ export class Track {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @ManyToOne(() => Artist, (artist) => artist.tracks)

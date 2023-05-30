@@ -64,7 +64,7 @@ export class UserRepository implements GenericRepository<User> {
     }
   }
 
-  async getByLogin(login: string) {
+  async getByLogin(login: string): Promise<User> {
     const user = this.usersRepository.findOneBy({ login });
 
     if (!user) throw new NotFoundException();
