@@ -17,9 +17,9 @@ import {
 } from '@nestjs/swagger';
 import { FavoritesService } from './favorites.service';
 import parseUuidOptions from 'src/const/uuid';
-import { TrackEntity } from 'src/tracks/entities/track.entity';
-import { AlbumEntity } from 'src/albums/entities/album.entity';
-import { ArtistEntity } from 'src/artists/entities/artist.entity';
+import { Track } from 'src/tracks/entities/track.entity';
+import { Album } from 'src/albums/entities/album.entity';
+import { Artist } from 'src/artists/entities/artist.entity';
 
 @Controller('favs')
 export class FavoritesController {
@@ -27,7 +27,7 @@ export class FavoritesController {
   @Post('track/:id')
   @ApiCreatedResponse({
     description: 'Artist was created successfully',
-    type: TrackEntity,
+    type: Track,
   })
   addTrack(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.favoritesService.addTrack(id);
@@ -36,7 +36,7 @@ export class FavoritesController {
   @Post('album/:id')
   @ApiCreatedResponse({
     description: 'Artist was created successfully',
-    type: AlbumEntity,
+    type: Album,
   })
   addAlbum(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.favoritesService.addAlbum(id);
@@ -45,7 +45,7 @@ export class FavoritesController {
   @Post('artist/:id')
   @ApiCreatedResponse({
     description: 'Artist was created successfully',
-    type: ArtistEntity,
+    type: Artist,
   })
   addArtist(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.favoritesService.addArtist(id);

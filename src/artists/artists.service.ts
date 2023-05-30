@@ -3,13 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { ArtistEntity } from './entities/artist.entity';
+import { Artist } from './entities/artist.entity';
 
 @Injectable()
 export class ArtistsService {
   constructor(
-    @InjectRepository(ArtistEntity)
-    private artistRepository: Repository<ArtistEntity>,
+    @InjectRepository(Artist)
+    private artistRepository: Repository<Artist>,
   ) {}
 
   create(createArtistDto: CreateArtistDto) {
@@ -44,7 +44,7 @@ export class ArtistsService {
     const artist = await this.artistRepository.findOneBy({ id });
 
     if (!artist) {
-      throw new HttpException('Arits not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
 
     await this.artistRepository.remove(artist);

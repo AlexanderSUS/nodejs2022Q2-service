@@ -21,7 +21,7 @@ import parseUuidOptions from 'src/const/uuid';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { ArtistEntity } from './entities/artist.entity';
+import { Artist } from './entities/artist.entity';
 
 @Controller('artist')
 export class ArtistsController {
@@ -29,8 +29,8 @@ export class ArtistsController {
 
   @Post()
   @ApiCreatedResponse({
-    description: 'Artist was created succesfully',
-    type: ArtistEntity,
+    description: 'Artist was created successfully',
+    type: Artist,
   })
   create(@Body() createArtistDto: CreateArtistDto) {
     return this.artistsService.create(createArtistDto);
@@ -38,15 +38,15 @@ export class ArtistsController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Return Artist array or emty array',
-    type: Array<ArtistEntity>,
+    description: 'Return Artist array or empty array',
+    type: Array<Artist>,
   })
   findAll() {
     return this.artistsService.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Return Artist by ID', type: ArtistEntity })
+  @ApiOkResponse({ description: 'Return Artist by ID', type: Artist })
   @ApiNotFoundResponse({ description: 'Artist does not exits' })
   @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
@@ -56,7 +56,7 @@ export class ArtistsController {
   @Put(':id')
   @ApiOkResponse({
     description: 'Update Artist and return this Artist',
-    type: ArtistEntity,
+    type: Artist,
   })
   @ApiNotFoundResponse({ description: 'Artist does not exits' })
   @ApiBadRequestResponse({ description: 'Invalid Artist ID' })

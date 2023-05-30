@@ -21,7 +21,7 @@ import parseUuidOptions from 'src/const/uuid';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { AlbumEntity } from './entities/album.entity';
+import { Album } from './entities/album.entity';
 
 @Controller('album')
 export class AlbumsController {
@@ -30,7 +30,7 @@ export class AlbumsController {
   @Post()
   @ApiCreatedResponse({
     description: 'Album was created succesfully',
-    type: AlbumEntity,
+    type: Album,
   })
   create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumsService.create(createAlbumDto);
@@ -39,14 +39,14 @@ export class AlbumsController {
   @Get()
   @ApiOkResponse({
     description: 'Return Album array or emty array',
-    type: Array<AlbumEntity>,
+    type: Array<Album>,
   })
   findAll() {
     return this.albumsService.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Return Album by ID', type: AlbumEntity })
+  @ApiOkResponse({ description: 'Return Album by ID', type: Album })
   @ApiNotFoundResponse({ description: 'Album does not exits' })
   @ApiBadRequestResponse({ description: 'Invalid Album ID' })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
@@ -56,7 +56,7 @@ export class AlbumsController {
   @Put(':id')
   @ApiOkResponse({
     description: 'Update Album and return this Album',
-    type: AlbumEntity,
+    type: Album,
   })
   @ApiNotFoundResponse({ description: 'Album does not exits' })
   @ApiBadRequestResponse({ description: 'Invalid Album ID' })

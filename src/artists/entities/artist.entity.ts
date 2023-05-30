@@ -1,9 +1,16 @@
-import { AlbumEntity } from 'src/albums/entities/album.entity';
-import { TrackEntity } from 'src/tracks/entities/track.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Album } from 'src/albums/entities/album.entity';
+import { Favorite } from 'src/favorites/entities/favorite.entity';
+import { Track } from 'src/tracks/entities/track.entity';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
-export class ArtistEntity {
+export class Artist {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -13,9 +20,12 @@ export class ArtistEntity {
   @Column()
   grammy: boolean;
 
-  @OneToMany(() => AlbumEntity, (album) => album.artist)
-  albums: AlbumEntity[];
+  @OneToMany(() => Track, (track) => track.artist)
+  tracks: Track[];
 
-  @OneToMany(() => TrackEntity, (track) => track.artist)
-  tracks: TrackEntity[];
+  @OneToMany(() => Album, (album) => album.artist)
+  albums: Album[];
+
+  @ManyToMany(() => Favorite)
+  favorites: Favorite[];
 }
