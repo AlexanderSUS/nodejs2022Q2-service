@@ -21,15 +21,16 @@ export class AllExceptionFilter implements ExceptionFilter {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse<Response>();
       const request = ctx.getRequest<Request>();
-      const status = exception.getStatus();
+      const statusCode = exception.getStatus();
 
       const errorLog = {
-        statusCode: status,
+        statusCode,
         timestamp: new Date().toISOString(),
         path: request.url,
+        message: exception.message,
       };
 
-      const errorLogMessage = `Time ${errorLog.timestamp}, method ${request.method} status ${status},  message ${exception.message}`;
+      const errorLogMessage = `Time ${errorLog.timestamp}, method ${request.method} status ${statusCode},  message ${exception.message}`;
 
       this.customLogger.error(
         errorLogMessage,
@@ -37,7 +38,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         'HttpExceptionFilter',
       );
 
-      response.status(status).json(errorLog);
+      response.status(statusCode).json(errorLog);
     } else {
       const { httpAdapter } = this.httpAdapterHost;
 
