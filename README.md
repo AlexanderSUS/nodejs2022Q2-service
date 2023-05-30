@@ -55,6 +55,12 @@ To run migration run command
 ```sh
 docker exec app npm run migration:run
 ```
+
+OR with one command 
+```sh
+npm run migrate:docker
+```
+
 After that database will updated and application will be ready to use or running tests
 
 To stop docker container run command
