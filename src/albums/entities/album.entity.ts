@@ -1,16 +1,17 @@
-import { ArtistEntity } from 'src/artists/entities/artist.entity';
-import { TrackEntity } from 'src/tracks/entities/track.entity';
+import { Artist } from 'src/artists/entities/artist.entity';
+import { Favorite } from 'src/favorites/entities/favorite.entity';
+import { Track } from 'src/tracks/entities/track.entity';
 import {
   Column,
   Entity,
-  JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
-export class AlbumEntity {
+export class Album {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -20,16 +21,12 @@ export class AlbumEntity {
   @Column()
   year: number;
 
-  @ManyToOne(() => ArtistEntity, (artist) => artist.albums, {
-    nullable: true,
-    onDelete: 'SET NULL',
-  })
-  @JoinColumn({ name: 'artistId' })
-  artist: ArtistEntity;
+  @ManyToOne(() => Artist, (artist) => artist.albums)
+  artist: Artist;
 
-  @Column({ nullable: true })
-  artistId: string;
+  @OneToMany(() => Track, (track) => track.album)
+  tracks: Track[];
 
-  @OneToMany(() => TrackEntity, (track) => track.album)
-  tracks: TrackEntity[];
+  @ManyToMany(() => Favorite)
+  favorites: Favorite[];
 }

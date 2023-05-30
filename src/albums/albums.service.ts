@@ -3,13 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { AlbumEntity } from './entities/album.entity';
+import { Album } from './entities/album.entity';
 
 @Injectable()
 export class AlbumsService {
   constructor(
-    @InjectRepository(AlbumEntity)
-    private albumRepository: Repository<AlbumEntity>,
+    @InjectRepository(Album)
+    private albumRepository: Repository<Album>,
   ) {}
 
   create(createAlbumDto: CreateAlbumDto) {

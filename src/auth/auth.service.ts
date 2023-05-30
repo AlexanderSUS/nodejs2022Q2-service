@@ -4,7 +4,7 @@ import { IUser } from 'src/user/interfaces/user.interface';
 import { UserService } from 'src/user/user.service';
 import { TokensService } from './tokens.service';
 import { HashService } from './hash.service';
-import { UserEntity } from 'src/user/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +44,7 @@ export class AuthService {
     return tokens;
   }
 
-  async refresh({ id, login }: UserEntity) {
+  async refresh({ id, login }: User) {
     const tokens = this.tokensService.getTokens({ login, userId: id });
 
     const newRefreshTokenHash = await this.hashService.hash(

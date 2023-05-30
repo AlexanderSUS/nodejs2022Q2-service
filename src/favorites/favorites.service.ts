@@ -1,25 +1,25 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AlbumEntity } from 'src/albums/entities/album.entity';
-import { ArtistEntity } from 'src/artists/entities/artist.entity';
-import { TrackEntity } from 'src/tracks/entities/track.entity';
+import { Album } from 'src/albums/entities/album.entity';
+import { Artist } from 'src/artists/entities/artist.entity';
+import { Track } from 'src/tracks/entities/track.entity';
 import { Repository } from 'typeorm';
-import { FavoriteEntity } from './entities/favorite.entity';
+import { Favorite } from './entities/favorite.entity';
 
 @Injectable()
 export class FavoritesService {
   constructor(
-    @InjectRepository(FavoriteEntity)
-    private favoriteRepository: Repository<FavoriteEntity>,
+    @InjectRepository(Favorite)
+    private favoriteRepository: Repository<Favorite>,
 
-    @InjectRepository(ArtistEntity)
-    private artistsRepository: Repository<ArtistEntity>,
+    @InjectRepository(Artist)
+    private artistsRepository: Repository<Artist>,
 
-    @InjectRepository(AlbumEntity)
-    private albumsRepository: Repository<AlbumEntity>,
+    @InjectRepository(Album)
+    private albumsRepository: Repository<Album>,
 
-    @InjectRepository(TrackEntity)
-    private tracksRepository: Repository<TrackEntity>,
+    @InjectRepository(Track)
+    private tracksRepository: Repository<Track>,
   ) {}
 
   async addTrack(id: string) {
@@ -39,7 +39,7 @@ export class FavoritesService {
     });
 
     if (!favorite) {
-      favorite = await this.favoriteRepository.save(new FavoriteEntity());
+      favorite = await this.favoriteRepository.save(new Favorite());
     }
 
     favorite.tracks.push(track);
@@ -64,7 +64,7 @@ export class FavoritesService {
     });
 
     if (!favorite) {
-      favorite = await this.favoriteRepository.save(new FavoriteEntity());
+      favorite = await this.favoriteRepository.save(new Favorite());
     }
 
     favorite.albums.push(album);
@@ -89,7 +89,7 @@ export class FavoritesService {
     });
 
     if (!favorite) {
-      favorite = await this.favoriteRepository.save(new FavoriteEntity());
+      favorite = await this.favoriteRepository.save(new Favorite());
     }
 
     favorite.artists.push(artist);
@@ -110,7 +110,7 @@ export class FavoritesService {
       return favorites;
     }
 
-    await this.favoriteRepository.save(new FavoriteEntity());
+    await this.favoriteRepository.save(new Favorite());
 
     const [emptyFavorites] = await this.favoriteRepository.find({
       relations: {

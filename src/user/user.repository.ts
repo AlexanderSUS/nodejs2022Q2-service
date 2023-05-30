@@ -6,15 +6,15 @@ import {
 } from '@nestjs/common';
 import { GenericRepository } from 'src/database/generic.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { PostgresErrorCode } from 'src/database/enum/postgres-error-code.enum';
 
 @Injectable()
-export class UserRepository implements GenericRepository<UserEntity> {
+export class UserRepository implements GenericRepository<User> {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly usersRepository: Repository<UserEntity>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
   ) {}
 
   getAll() {
@@ -47,8 +47,8 @@ export class UserRepository implements GenericRepository<UserEntity> {
 
   async update(
     id: string,
-    updateDto: Partial<Omit<UserEntity, 'id'>>,
-  ): Promise<UserEntity> {
+    updateDto: Partial<Omit<User, 'id'>>,
+  ): Promise<User> {
     const user = await this.getById(id);
 
     if (!user) throw new NotFoundException();

@@ -21,7 +21,7 @@ import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import parseUuidOptions from 'src/const/uuid';
-import { TrackEntity } from './entities/track.entity';
+import { Track } from './entities/track.entity';
 
 @Controller('track')
 export class TracksController {
@@ -30,7 +30,7 @@ export class TracksController {
   @Post()
   @ApiCreatedResponse({
     description: 'Artist was created successfully',
-    type: TrackEntity,
+    type: Track,
   })
   create(@Body() createTrackDto: CreateTrackDto) {
     return this.tracksService.create(createTrackDto);
@@ -38,15 +38,15 @@ export class TracksController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Return Artist array or emty array',
-    type: Array<TrackEntity>,
+    description: 'Return Artist array or empty array',
+    type: Array<Track>,
   })
   findAll() {
     return this.tracksService.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Return Artist by ID', type: TrackEntity })
+  @ApiOkResponse({ description: 'Return Artist by ID', type: Track })
   @ApiNotFoundResponse({ description: 'Artist does not exits' })
   @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
@@ -56,7 +56,7 @@ export class TracksController {
   @Put(':id')
   @ApiOkResponse({
     description: 'Update Artist and return this Artist',
-    type: TrackEntity,
+    type: Track,
   })
   @ApiNotFoundResponse({ description: 'Artist does not exits' })
   @ApiBadRequestResponse({ description: 'Invalid Artist ID' })

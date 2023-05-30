@@ -2,14 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TrackEntity } from './entities/track.entity';
+import { Track } from './entities/track.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class TracksService {
   constructor(
-    @InjectRepository(TrackEntity)
-    private trackRepository: Repository<TrackEntity>,
+    @InjectRepository(Track)
+    private trackRepository: Repository<Track>,
   ) {}
 
   create(createTrackDto: CreateTrackDto) {
