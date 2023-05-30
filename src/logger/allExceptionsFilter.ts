@@ -21,23 +21,24 @@ export class AllExceptionFilter implements ExceptionFilter {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse<Response>();
       const request = ctx.getRequest<Request>();
-      const status = exception.getStatus();
+      const statusCode = exception.getStatus();
 
       const errorLog = {
-        statusCode: status,
+        statusCode,
         timestamp: new Date().toISOString(),
         path: request.url,
+        message: exception.message,
       };
 
-      const errorLogMessage = `Time ${errorLog.timestamp}, method ${request.method} status ${status},  message ${exception.message}`;
+      const errorLogMessage = `Time ${errorLog.timestamp}, method ${request.method} status ${statusCode},  message ${exception.message}`;
 
       this.customLogger.error(
         errorLogMessage,
         exception.stack,
-        'HttpExeptionFilter',
+        'HttpExceptionFilter',
       );
 
-      response.status(status).json(errorLog);
+      response.status(statusCode).json(errorLog);
     } else {
       const { httpAdapter } = this.httpAdapterHost;
 
@@ -53,7 +54,7 @@ export class AllExceptionFilter implements ExceptionFilter {
       this.customLogger.error(
         JSON.stringify(responseBody),
         exception.stack ? exception.stack : null,
-        'UnhandledExeptionFilter',
+        'UnhandledExceptionFilter',
       );
 
       httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

@@ -20,6 +20,7 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Public } from './public.decorator';
 import { RefreshAuthGuard } from './refresh-auth.guard';
+import { RequestWithUser } from './interface/request-with-user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -33,7 +34,7 @@ export class AuthController {
   @ApiBadRequestResponse({
     description: 'Invalid credentials has been provided',
   })
-  singup(@Body() createUserDto: CreateUserDto) {
+  signUp(@Body() createUserDto: CreateUserDto) {
     return this.authService.signUp(createUserDto);
   }
 
@@ -45,18 +46,11 @@ export class AuthController {
     description: 'Invalid credentials has been provided',
   })
   @ApiForbiddenResponse({
-    description: "user with such login, password doesn't extist",
+    description: "user with such login, password doesn't exist",
   })
   @HttpCode(HttpStatus.OK)
-  async login(@Request() req) {
-    const { access_token, refresh_token } = await this.authService.login(
-      req.user,
-    );
-
-    return {
-      accessToken: access_token,
-      refreshToken: refresh_token,
-    };
+  async login(@Request() { user }: RequestWithUser) {
+    return this.authService.login(user);
   }
 
   @Public()
@@ -67,7 +61,7 @@ export class AuthController {
     description: 'Refresh token is invalid or expired',
   })
   @HttpCode(HttpStatus.OK)
-  refresh(@Request() req) {
-    return this.authService.refresh(req.user);
+  refresh(@Request() { user }: RequestWithUser) {
+    return this.authService.refresh(user);
   }
 }

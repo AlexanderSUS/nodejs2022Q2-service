@@ -1,23 +1,25 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import * as bycrypt from 'bcrypt';
 import { IUser } from 'src/user/interfaces/user.interface';
 import { UserService } from 'src/user/user.service';
-import { JwtService } from '@nestjs/jwt';
+import { TokensService } from './tokens.service';
+import { HashService } from './hash.service';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private jwtService: JwtService,
+    private tokensService: TokensService,
+    private hashService: HashService,
   ) {}
 
   async validateUser(login: string, pass: string): Promise<IUser | null> {
     const user = await this.userService.findOneByLogin(login);
-
-    const isPasswordMatch = await bycrypt.compare(pass, user.password);
+    const isPasswordMatch = await this.hashService.compare(pass, user.password);
 
     if (user && isPasswordMatch) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
 
       return result;
@@ -26,80 +28,46 @@ export class AuthService {
     return null;
   }
 
-  private getTokens(payload: { login: string; userId: string }) {
-    const access_token = this.jwtService.sign(payload, {
-      expiresIn: process.env.TOKEN_EXPIRE_TIME,
-      secret: process.env.JWT_SECRET_KEY,
-    });
+  async signUp({ login, password }: CreateUserDto) {
+    const hashedPassword = await this.hashService.hash(password);
 
-    const refresh_token = this.jwtService.sign(payload, {
-      expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
-      secret: process.env.JWT_SECRET_KEY,
-    });
+    await this.userService.create({ login, password: hashedPassword });
 
-    return { access_token, refresh_token };
+    return { message: 'User was successfully created' };
   }
 
-  async signUp(createUserDto: CreateUserDto) {
-    const password = await bycrypt.hash(
-      createUserDto.password,
-      parseInt(process.env.CRYPT_SALT),
-    );
-
-    await this.userService.create({ ...createUserDto, password });
-
-    return { msg: 'User was successfully created' };
-  }
-
-  async login(user: IUser) {
-    const tokens = this.getTokens({
-      login: user.login,
-      userId: user.id,
-    });
-
-    const refreshTokenHash = await bycrypt.hash(
-      tokens.refresh_token,
-      parseInt(process.env.CRYPT_SALT),
-    );
-
-    await this.userService.updateRefreshToken(user.id, refreshTokenHash);
+  async login({ login, id: userId }: IUser) {
+    const tokens = this.tokensService.getTokens({ login, userId });
+    const refreshTokenHash = await this.hashService.hash(tokens.refreshToken);
+    await this.userService.updateRefreshToken(userId, refreshTokenHash);
 
     return tokens;
   }
 
-  async refresh({
-    id,
-    login,
-    refreshToken,
-  }: {
-    id: string;
-    login: string;
-    refreshToken: string;
-  }) {
-    const { refreshTokenHash } = await this.userService.findOne(id);
+  async refresh({ id, login }: UserEntity) {
+    const tokens = this.tokensService.getTokens({ login, userId: id });
 
-    if (!refreshTokenHash) {
-      throw new HttpException('Not authorized', HttpStatus.FORBIDDEN);
-    }
-
-    const isRefreshMatch = await bycrypt.compare(
-      refreshToken,
-      refreshTokenHash,
-    );
-
-    if (!isRefreshMatch) {
-      throw new HttpException('Not authorized', HttpStatus.FORBIDDEN);
-    }
-
-    const tokens = this.getTokens({ login, userId: id });
-
-    const newRefreshTokenHash = await bycrypt.hash(
-      tokens.refresh_token,
-      parseInt(process.env.CRYPT_SALT),
+    const newRefreshTokenHash = await this.hashService.hash(
+      tokens.refreshToken,
     );
 
     await this.userService.updateRefreshToken(id, newRefreshTokenHash);
 
     return tokens;
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
+    const user = await this.userService.findOne(userId);
+
+    const isRefreshTokenMatching = await this.hashService.compare(
+      refreshToken,
+      user.refreshTokenHash,
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
+
+    return null;
   }
 }

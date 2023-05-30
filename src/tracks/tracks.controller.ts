@@ -29,7 +29,7 @@ export class TracksController {
 
   @Post()
   @ApiCreatedResponse({
-    description: 'Artist was created succesfully',
+    description: 'Artist was created successfully',
     type: TrackEntity,
   })
   create(@Body() createTrackDto: CreateTrackDto) {

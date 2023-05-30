@@ -1,3 +1,4 @@
+import { Exclude, Transform } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -14,25 +15,29 @@ export class UserEntity {
   @Generated('uuid')
   id: string; // uuid v4
 
-  @Column()
+  @Column({ unique: true })
   login: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ nullable: true })
+  @Exclude()
   refreshTokenHash: string;
 
   @VersionColumn()
-  version: number; // integer number, increments on update
+  version: number;
 
+  @Transform(({ value }) => Date.parse(value), { toPlainOnly: true })
   @CreateDateColumn({
     type: 'timestamp',
   })
-  createdAt: number; // timestamp of creation
+  createdAt: number;
 
+  @Transform(({ value }) => Date.parse(value), { toPlainOnly: true })
   @UpdateDateColumn({
     type: 'timestamp',
   })
-  updatedAt: number; // timestamp of last update
+  updatedAt: number;
 }

@@ -9,6 +9,8 @@ import {
   ParseUUIDPipe,
   HttpStatus,
   HttpCode,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import {
   ApiOkResponse,
@@ -24,12 +26,13 @@ import { UpdatePasswordDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
   @ApiCreatedResponse({
-    description: 'User was created succesfully',
+    description: 'User was created successfully',
     type: UserResponse,
   })
   create(@Body() createUserDto: CreateUserDto) {
@@ -38,10 +41,10 @@ export class UserController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Return user array or emty array',
+    description: 'Return user array or empty array',
     type: Array<UserResponse>,
   })
-  findAlll() {
+  findAll() {
     return this.userService.findAll();
   }
 

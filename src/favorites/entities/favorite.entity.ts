@@ -4,7 +4,7 @@ import { TrackEntity } from 'src/tracks/entities/track.entity';
 import { Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class FavouriteEntity {
+export class FavoriteEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

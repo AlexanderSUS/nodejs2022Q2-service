@@ -5,7 +5,7 @@ import { UserModule } from './user/user.module';
 import { ArtistsModule } from './artists/artists.module';
 import { AlbumsModule } from './albums/albums.module';
 import { TracksModule } from './tracks/tracks.module';
-import { FavouritesModule } from './favourites/favourites.module';
+import { FavoritesModule } from './favorites/favorites.module';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from './config/configuration';
 import { validationSchema } from './config/validation';
@@ -18,6 +18,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { CustomLoggerModule } from './logger/logger.module';
 import { AllExceptionFilter } from './logger/allExceptionsFilter';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { AllExceptionFilter } from './logger/allExceptionsFilter';
     ArtistsModule,
     AlbumsModule,
     TracksModule,
-    FavouritesModule,
+    FavoritesModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
@@ -34,6 +35,7 @@ import { AllExceptionFilter } from './logger/allExceptionsFilter';
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
     CustomLoggerModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [

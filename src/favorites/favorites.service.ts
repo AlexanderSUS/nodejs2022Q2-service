@@ -4,13 +4,13 @@ import { AlbumEntity } from 'src/albums/entities/album.entity';
 import { ArtistEntity } from 'src/artists/entities/artist.entity';
 import { TrackEntity } from 'src/tracks/entities/track.entity';
 import { Repository } from 'typeorm';
-import { FavouriteEntity } from './entities/favourite.entity';
+import { FavoriteEntity } from './entities/favorite.entity';
 
 @Injectable()
-export class FavouritesService {
+export class FavoritesService {
   constructor(
-    @InjectRepository(FavouriteEntity)
-    private favouriteRepository: Repository<FavouriteEntity>,
+    @InjectRepository(FavoriteEntity)
+    private favoriteRepository: Repository<FavoriteEntity>,
 
     @InjectRepository(ArtistEntity)
     private artistsRepository: Repository<ArtistEntity>,
@@ -32,19 +32,19 @@ export class FavouritesService {
       );
     }
 
-    let [favourite] = await this.favouriteRepository.find({
+    let [favorite] = await this.favoriteRepository.find({
       relations: {
         tracks: true,
       },
     });
 
-    if (!favourite) {
-      favourite = await this.favouriteRepository.save(new FavouriteEntity());
+    if (!favorite) {
+      favorite = await this.favoriteRepository.save(new FavoriteEntity());
     }
 
-    favourite.tracks.push(track);
+    favorite.tracks.push(track);
 
-    await this.favouriteRepository.save(favourite);
+    await this.favoriteRepository.save(favorite);
   }
 
   async addAlbum(id: string) {
@@ -57,19 +57,19 @@ export class FavouritesService {
       );
     }
 
-    let [favourite] = await this.favouriteRepository.find({
+    let [favorite] = await this.favoriteRepository.find({
       relations: {
         albums: true,
       },
     });
 
-    if (!favourite) {
-      favourite = await this.favouriteRepository.save(new FavouriteEntity());
+    if (!favorite) {
+      favorite = await this.favoriteRepository.save(new FavoriteEntity());
     }
 
-    favourite.albums.push(album);
+    favorite.albums.push(album);
 
-    await this.favouriteRepository.save(favourite);
+    await this.favoriteRepository.save(favorite);
   }
 
   async addArtist(id: string) {
@@ -82,23 +82,23 @@ export class FavouritesService {
       );
     }
 
-    let [favourite] = await this.favouriteRepository.find({
+    let [favorite] = await this.favoriteRepository.find({
       relations: {
         artists: true,
       },
     });
 
-    if (!favourite) {
-      favourite = await this.favouriteRepository.save(new FavouriteEntity());
+    if (!favorite) {
+      favorite = await this.favoriteRepository.save(new FavoriteEntity());
     }
 
-    favourite.artists.push(artist);
+    favorite.artists.push(artist);
 
-    await this.favouriteRepository.save(favourite);
+    await this.favoriteRepository.save(favorite);
   }
 
   async findAll() {
-    const [favourites] = await this.favouriteRepository.find({
+    const [favorites] = await this.favoriteRepository.find({
       relations: {
         artists: true,
         albums: true,
@@ -106,13 +106,13 @@ export class FavouritesService {
       },
     });
 
-    if (favourites) {
-      return favourites;
+    if (favorites) {
+      return favorites;
     }
 
-    await this.favouriteRepository.save(new FavouriteEntity());
+    await this.favoriteRepository.save(new FavoriteEntity());
 
-    const [emptyFavourites] = await this.favouriteRepository.find({
+    const [emptyFavorites] = await this.favoriteRepository.find({
       relations: {
         artists: true,
         albums: true,
@@ -120,7 +120,7 @@ export class FavouritesService {
       },
     });
 
-    return emptyFavourites;
+    return emptyFavorites;
   }
 
   async removeArtist(id: string) {
@@ -133,22 +133,22 @@ export class FavouritesService {
       );
     }
 
-    const [favourite] = await this.favouriteRepository.find({
+    const [favorite] = await this.favoriteRepository.find({
       relations: {
         artists: true,
       },
     });
 
-    if (!favourite) {
+    if (!favorite) {
       throw new HttpException(
-        'Entity does not exits in favourtes',
+        'Entity does not exits in favorites',
         HttpStatus.NOT_FOUND,
       );
     }
 
-    favourite.artists = favourite.artists.filter((artist) => artist.id !== id);
+    favorite.artists = favorite.artists.filter((artist) => artist.id !== id);
 
-    await this.favouriteRepository.save(favourite);
+    await this.favoriteRepository.save(favorite);
   }
 
   async removeAlbum(id: string) {
@@ -161,22 +161,22 @@ export class FavouritesService {
       );
     }
 
-    const [favourite] = await this.favouriteRepository.find({
+    const [favorite] = await this.favoriteRepository.find({
       relations: {
         albums: true,
       },
     });
 
-    if (!favourite) {
+    if (!favorite) {
       throw new HttpException(
-        'Entity does not exits in favourtes',
+        'Entity does not exits in favorites',
         HttpStatus.NOT_FOUND,
       );
     }
 
-    favourite.albums = favourite.albums.filter((album) => album.id !== id);
+    favorite.albums = favorite.albums.filter((album) => album.id !== id);
 
-    await this.favouriteRepository.save(favourite);
+    await this.favoriteRepository.save(favorite);
   }
 
   async removeTrack(id: string) {
@@ -189,21 +189,21 @@ export class FavouritesService {
       );
     }
 
-    const [favourite] = await this.favouriteRepository.find({
+    const [favorite] = await this.favoriteRepository.find({
       relations: {
         tracks: true,
       },
     });
 
-    if (!favourite) {
+    if (!favorite) {
       throw new HttpException(
-        'Track does not exits in favourtes',
+        'Track does not exits in favorites',
         HttpStatus.NOT_FOUND,
       );
     }
 
-    favourite.tracks = favourite.tracks.filter((track) => track.id !== id);
+    favorite.tracks = favorite.tracks.filter((track) => track.id !== id);
 
-    await this.favouriteRepository.save(favourite);
+    await this.favoriteRepository.save(favorite);
   }
 }
