@@ -5,6 +5,7 @@ import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from 'src/config/environment-variables.interface';
+import { JwtTokenPayload } from './interface/jwt-token-payload.interface';
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
@@ -22,10 +23,10 @@ export class RefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  validate(req: Request, payload: any) {
+  validate(req: Request, payload: JwtTokenPayload) {
     return this.authService.getUserIfRefreshTokenMatches(
       req.body.refreshToken,
-      payload.id,
+      payload.userId,
     );
   }
 }
