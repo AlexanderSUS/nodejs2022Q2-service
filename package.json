@@ -20,10 +20,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "scan": "docker scan nodejs2022q2-service_db && docker scan nodejs2022q2-service_app",
-    "migration:generate": "npx typeorm-ts-node-esm migration:generate src/migrations/migration -d dist/dataSource/dataSource.js",
-    "migration:run": "npx typeorm-ts-node-esm migration:run -d dist/dataSource/dataSource.js",
+    "migration:generate": "npx typeorm-ts-node-esm migration:generate src/database/migrations/migration -d dist/database/data-source.js",
+    "migration:run": "npx typeorm-ts-node-esm migration:run -d dist/database/data-source.js",
     "migrate:docker": "docker exec app npm run migration:generate && docker exec app npm run migration:run",
-    "clear-restart": "docker compose down && docker volume rm $(docker volume ls -q) && rm -rf ./dist && rm -rf ./src/migrations && docker compose up"
+    "clean-restart": "docker compose down && docker volume rm $(docker volume ls -q) && rm -rf ./dist && rm -rf ./src/database/migrations && docker compose up"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

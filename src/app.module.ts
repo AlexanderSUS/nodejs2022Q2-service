@@ -1,5 +1,4 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserModule } from './user/user.module';
 import { ArtistsModule } from './artists/artists.module';
@@ -8,10 +7,8 @@ import { TracksModule } from './tracks/tracks.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from './config/configuration';
-import { validationSchema } from './config/validation';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
@@ -27,12 +24,7 @@ import { DatabaseModule } from './database/database.module';
     AlbumsModule,
     TracksModule,
     FavoritesModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configuration],
-      validationSchema,
-    }),
-    TypeOrmModule.forRoot(typeOrmConfig),
+    ConfigModule.forRoot(configuration),
     AuthModule,
     CustomLoggerModule,
     DatabaseModule,

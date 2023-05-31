@@ -15,8 +15,6 @@ async function bootstrap() {
 
   app.useLogger(customLogger);
 
-  const config = app.get(ConfigService);
-
   const docConfig = new DocumentBuilder()
     .setTitle('Home Library Service')
     .setDescription('The Home Library Service API description')
@@ -31,7 +29,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  const port = config.get('port');
+  const configService = app.get(ConfigService);
+  const port = configService.get('PORT');
 
   await app.listen(port, () => {
     console.log(`Listening at http://loaclhost: ${port}`);

@@ -3,16 +3,19 @@ import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as fs from 'fs';
 import { LogData } from './types/logData';
+import { EnvironmentVariables } from 'src/config/environment-variables.interface';
 
 @Injectable()
 export default class LogsService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService<EnvironmentVariables>,
+  ) {}
 
   saveLog({ message, context, level }: LogData) {
     const BYTE_PER_CHAR = 2;
-    const logsFolder = this.configService.get('logsFolder');
-    const maxFileSize = this.configService.get('logFileMaxSize');
-    const logDir = this.configService.get('logDir');
+    const logsFolder = this.configService.get('LOGS_FOLDER');
+    const maxFileSize = this.configService.get('LOG_FILE_MAX_SIZE');
+    const logDir = this.configService.get('LOG_DIR');
     const logString = `${level} ${context} ${message}\n`;
 
     if (!fs.existsSync(logsFolder)) {
@@ -43,9 +46,9 @@ export default class LogsService {
 
   saveError({ message, context, level }: LogData) {
     const BYTE_PER_CHAR = 2;
-    const logsFolder = this.configService.get('logsFolder');
-    const maxFileSize = this.configService.get('logFileMaxSize');
-    const errorDir = this.configService.get('errDir');
+    const logsFolder = this.configService.get('LOGS_FOLDER');
+    const maxFileSize = this.configService.get('LOG_FILE_MAX_SIZE');
+    const errorDir = this.configService.get('ERR_DIR');
     const logString = `${level} ${context} ${message}\n`;
 
     if (!fs.existsSync(logsFolder)) {

@@ -3,6 +3,7 @@ import { ConsoleLoggerOptions } from '@nestjs/common/services/console-logger.ser
 import { ConfigService } from '@nestjs/config';
 import LogsService from './logs.service';
 import getLogLevels from 'src/utils/getLogLevels';
+import { EnvironmentVariables } from 'src/config/environment-variables.interface';
 
 @Injectable()
 class CustomLogger extends ConsoleLogger {
@@ -11,10 +12,10 @@ class CustomLogger extends ConsoleLogger {
   constructor(
     context: string,
     options: ConsoleLoggerOptions,
-    configService: ConfigService,
+    configService: ConfigService<EnvironmentVariables>,
     logsService: LogsService,
   ) {
-    const logLevel = configService.get('logLevel');
+    const logLevel = configService.get('LOG_LEVEL');
 
     console.log('LOG LEVEL', logLevel);
 
