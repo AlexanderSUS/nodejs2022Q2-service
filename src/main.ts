@@ -8,12 +8,10 @@ import './utils/externalErrorLogger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: false,
+    bufferLogs: true,
   });
 
-  const customLogger = app.get(CustomLogger);
-
-  app.useLogger(customLogger);
+  app.useLogger(app.get(CustomLogger));
 
   const docConfig = new DocumentBuilder()
     .setTitle('Home Library Service')

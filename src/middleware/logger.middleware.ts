@@ -1,6 +1,6 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import LogsService from './logs.service';
+import LogsService from '../logger/logs.service';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -10,15 +10,12 @@ export class LoggerMiddleware implements NestMiddleware {
   use(request: Request, response: Response, next: NextFunction): void {
     const { originalUrl, method, query, body } = request;
 
-    console.log('BODY', { ...body });
-
     response.on('finish', () => {
-      const { statusCode } = response;
-      // const contentLength = response.get('content-length');
-
       const log = `Time: ${new Date().toISOString()}, ${method} ${originalUrl} query=${JSON.stringify(
         query,
-      )} body=${JSON.stringify(body)}. Response: status code ${statusCode}`;
+      )} body=${JSON.stringify(body)}. Response: status code ${
+        response.statusCode
+      }`;
 
       this.logger.log(log);
       this.loggerService.saveLog({

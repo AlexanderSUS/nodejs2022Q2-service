@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as fs from 'fs';
-import { LogData } from './types/logData';
+import { LogData } from './interfaces/log-data.interface';
 import { EnvironmentVariables } from 'src/config/environment-variables.interface';
 
 @Injectable()
