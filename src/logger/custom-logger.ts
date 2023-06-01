@@ -1,7 +1,7 @@
 import { Injectable, ConsoleLogger, LoggerService } from '@nestjs/common';
 import { ConsoleLoggerOptions } from '@nestjs/common/services/console-logger.service';
 import { ConfigService } from '@nestjs/config';
-import LogsService from './logs.service';
+import LogsService from './logs-writer.service';
 import getLogLevels from 'src/utils/getLogLevels';
 import { EnvironmentVariables } from 'src/config/environment-variables.interface';
 
