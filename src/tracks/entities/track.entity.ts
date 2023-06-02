@@ -17,11 +17,23 @@ export class Track {
   @Column()
   name: string;
 
-  @ManyToOne(() => Artist, (artist) => artist.tracks)
+  @ManyToOne(() => Artist, (artist) => artist.tracks, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   artist: Artist;
 
-  @ManyToOne(() => Album, (album) => album.tracks)
+  @Column({ type: 'uuid', nullable: true })
+  artistId: string;
+
+  @ManyToOne(() => Album, (album) => album.tracks, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   album: Album;
+
+  @Column({ type: 'uuid', nullable: true })
+  albumId: string;
 
   @ManyToMany(() => Favorite)
   favorites: Favorite[];

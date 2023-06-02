@@ -19,11 +19,8 @@ git clone git@github.com:AlexanderSUS/graphql-service.git
 ```sh
 cd nodejs2022Q2-service
 ```
-4. Switch branch
-```sh
-git checkout auth
-```
-4. Install npm modules. This step is needed for running tests 
+
+3. Install npm modules. This step is needed for running tests 
 
 ```sh
 npm install
@@ -55,6 +52,12 @@ To run migration run command
 ```sh
 docker exec app npm run migration:run
 ```
+
+OR with one command 
+```sh
+npm run migrate:docker
+```
+
 After that database will updated and application will be ready to use or running tests
 
 To stop docker container run command

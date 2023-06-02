@@ -1,6 +1,6 @@
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import CustomLogger from './logger/custom-logger';
@@ -8,14 +8,10 @@ import './utils/externalErrorLogger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: false,
+    bufferLogs: true,
   });
 
-  const customLogger = app.get(CustomLogger);
-
-  app.useLogger(customLogger);
-
-  const config = app.get(ConfigService);
+  app.useLogger(app.get(CustomLogger));
 
   const docConfig = new DocumentBuilder()
     .setTitle('Home Library Service')
@@ -29,9 +25,9 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  const port = config.get('port');
+  const configService = app.get(ConfigService);
+  const port = configService.get('PORT');
 
   await app.listen(port, () => {
     console.log(`Listening at http://loaclhost: ${port}`);

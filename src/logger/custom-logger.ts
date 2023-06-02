@@ -1,20 +1,21 @@
-import { Injectable, ConsoleLogger } from '@nestjs/common';
+import { Injectable, ConsoleLogger, LoggerService } from '@nestjs/common';
 import { ConsoleLoggerOptions } from '@nestjs/common/services/console-logger.service';
 import { ConfigService } from '@nestjs/config';
-import LogsService from './logs.service';
+import LogsService from './logs-writer.service';
 import getLogLevels from 'src/utils/getLogLevels';
+import { EnvironmentVariables } from 'src/config/environment-variables.interface';
 
 @Injectable()
-class CustomLogger extends ConsoleLogger {
+class CustomLogger extends ConsoleLogger implements LoggerService {
   private readonly logsService: LogsService;
 
   constructor(
     context: string,
     options: ConsoleLoggerOptions,
-    configService: ConfigService,
+    configService: ConfigService<EnvironmentVariables>,
     logsService: LogsService,
   ) {
-    const logLevel = configService.get('logLevel');
+    const logLevel = configService.get('LOG_LEVEL', { infer: true });
 
     console.log('LOG LEVEL', logLevel);
 

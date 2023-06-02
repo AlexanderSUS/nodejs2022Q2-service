@@ -4,6 +4,7 @@ import { Track } from 'src/tracks/entities/track.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -21,8 +22,15 @@ export class Album {
   @Column()
   year: number;
 
-  @ManyToOne(() => Artist, (artist) => artist.albums)
-  artist: Artist;
+  @ManyToOne(() => Artist, (artist) => artist.albums, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn()
+  artist?: Artist;
+
+  @Column({ type: 'uuid', nullable: true })
+  artistId: string;
 
   @OneToMany(() => Track, (track) => track.album)
   tracks: Track[];
