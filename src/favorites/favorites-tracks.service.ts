@@ -1,6 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { FavoritesRepository } from './favorites.repository';
 import { TracksService } from 'src/tracks/tracks.service';
+import { StatusCodes } from 'http-status-codes';
 
 @Injectable()
 export class FavoritesTracksService {
@@ -10,8 +15,16 @@ export class FavoritesTracksService {
   ) {}
 
   async add(id: string) {
-    const track = await this.tracksService.findOne(id);
-    return this.favoritesRepository.addTrack(track);
+    try {
+      const track = await this.tracksService.findOne(id);
+      return this.favoritesRepository.addTrack(track);
+    } catch (err) {
+      if ('status' in err && err.status === StatusCodes.NOT_FOUND) {
+        throw new UnprocessableEntityException();
+      }
+
+      throw new InternalServerErrorException();
+    }
   }
 
   remove(id: string) {

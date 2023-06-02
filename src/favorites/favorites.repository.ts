@@ -23,7 +23,11 @@ export class FavoritesRepository {
     });
 
     if (!favorites) {
-      favorites = this.favoriteRepository.create();
+      favorites = this.favoriteRepository.create({
+        albums: [],
+        artists: [],
+        tracks: [],
+      });
       await this.favoriteRepository.save(favorites);
     }
 
@@ -62,21 +66,6 @@ export class FavoritesRepository {
     await this.favoriteRepository.save(favorite);
   }
 
-  // async remove(
-  //   relations: { tracks: true } | { albums: true } | { artists: true },
-  //   itemId: string,
-  // ) {
-  //   const key = Object.keys(relations)[0];
-
-  //   const favorite = await this.getFavorites(relations);
-  //   const index = favorite[key].findIndex(({ id }) => id === itemId);
-
-  //   if (index === -1) throw new NotFoundException(`${key} not found`);
-
-  //   favorite[key].splice(index, 1);
-  //   await this.favoriteRepository.save(favorite);
-  // }
-
   async removeTrack(trackId: string) {
     const favorite = await this.getFavorites({ tracks: true });
 
@@ -85,7 +74,7 @@ export class FavoritesRepository {
     if (index === -1) throw new NotFoundException('Track not found');
 
     favorite.tracks.splice(index, 1);
-    await this.favoriteRepository.save(favorite.tracks);
+    return this.favoriteRepository.save(favorite);
   }
 
   async removeAlbum(trackId: string) {
@@ -96,7 +85,7 @@ export class FavoritesRepository {
     if (index === -1) throw new NotFoundException('Album not found');
 
     favorite.albums.splice(index, 1);
-    await this.favoriteRepository.save(favorite.albums);
+    return this.favoriteRepository.save(favorite);
   }
 
   async removeArtist(trackId: string) {
@@ -107,6 +96,6 @@ export class FavoritesRepository {
     if (index === -1) throw new NotFoundException('Artist not found');
 
     favorite.artists.splice(index, 1);
-    await this.favoriteRepository.save(favorite.artists);
+    return this.favoriteRepository.save(favorite);
   }
 }

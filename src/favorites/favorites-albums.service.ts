@@ -1,6 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { AlbumsService } from 'src/albums/albums.service';
 import { FavoritesRepository } from './favorites.repository';
+import { StatusCodes } from 'http-status-codes';
 
 @Injectable()
 export class FavoritesAlbumsService {
@@ -10,8 +15,16 @@ export class FavoritesAlbumsService {
   ) {}
 
   async add(id: string) {
-    const album = await this.albumsService.findOne(id);
-    return this.favoritesRepository.addAlbum(album);
+    try {
+      const album = await this.albumsService.findOne(id);
+      return this.favoritesRepository.addAlbum(album);
+    } catch (err) {
+      if ('status' in err && err.status === StatusCodes.NOT_FOUND) {
+        throw new UnprocessableEntityException();
+      }
+
+      throw new InternalServerErrorException();
+    }
   }
 
   remove(id: string) {

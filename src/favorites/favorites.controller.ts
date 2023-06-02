@@ -62,8 +62,10 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Artist does not exits in favorites' })
   @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeArtist(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.favoritesService.removeArtist(id);
+  async removeArtist(
+    @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
+  ) {
+    await this.favoritesService.removeArtist(id);
   }
 
   @Delete('album/:id')
@@ -71,8 +73,10 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Album does not exits in favorites' })
   @ApiBadRequestResponse({ description: 'Invalid Album ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeAlbum(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.favoritesService.removeAlbum(id);
+  async removeAlbum(
+    @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
+  ) {
+    await this.favoritesService.removeAlbum(id);
   }
 
   @Delete('track/:id')
@@ -80,7 +84,9 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Artist does not exits in favorites' })
   @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeTrack(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
-    return this.favoritesService.removeTrack(id);
+  async removeTrack(
+    @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
+  ) {
+    await this.favoritesService.removeTrack(id);
   }
 }
