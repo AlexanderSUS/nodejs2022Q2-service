@@ -24,6 +24,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserResponse } from './dto/response-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import { plainToInstance } from 'class-transformer';
+import { User } from './entities/user.entity';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -63,12 +65,13 @@ export class UserController {
   })
   @ApiNotFoundResponse({ description: 'User does not exits' })
   @ApiBadRequestResponse({ description: 'Invalid user ID' })
-  update(
-    @Param('id', new ParseUUIDPipe(parseUuidOptions))
-    id: string,
+  async update(
+    @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
     @Body() updateUserDto: UpdatePasswordDto,
   ) {
-    return this.userService.updatePassword(id, updateUserDto);
+    const user = await this.userService.updatePassword(id, updateUserDto);
+
+    return plainToInstance(User, user);
   }
 
   @Delete(':id')

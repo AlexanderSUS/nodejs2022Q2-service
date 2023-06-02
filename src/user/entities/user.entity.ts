@@ -15,7 +15,7 @@ export class User {
   @Generated('uuid')
   id: string; // uuid v4
 
-  @Column({ unique: true })
+  @Column()
   login: string;
 
   @Column()
@@ -29,13 +29,13 @@ export class User {
   @VersionColumn()
   version: number;
 
-  @Transform(({ value }) => Date.parse(value), { toPlainOnly: true })
+  @Transform(({ value }) => new Date(value).getTime(), { toPlainOnly: true })
   @CreateDateColumn({
     type: 'timestamp',
   })
   createdAt: number;
 
-  @Transform(({ value }) => Date.parse(value), { toPlainOnly: true })
+  @Transform(({ value }) => new Date(value).getTime(), { toPlainOnly: true })
   @UpdateDateColumn({
     type: 'timestamp',
   })

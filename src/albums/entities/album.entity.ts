@@ -16,13 +16,16 @@ export class Album {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
 
   @Column()
   year: number;
 
-  @ManyToOne(() => Artist, (artist) => artist.albums, { nullable: true })
+  @ManyToOne(() => Artist, (artist) => artist.albums, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn()
   artist?: Artist;
 
