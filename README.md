@@ -13,36 +13,50 @@
 1. Clone this repository
 
 ```sh
-git clone git@github.com:AlexanderSUS/graphql-service.git
+git clone git@github.com:AlexanderSUS/nodejs2022Q2-service.git
 ```
-2. Go to `nodejs2022Q2-service` folder
+2. Go to `nodejs2022Q2-service` directory 
 ```sh
 cd nodejs2022Q2-service
 ```
 
-3. Install npm modules. This step is needed for running tests 
+3. Install npm modules
 
 ```sh
 npm install
 ```
 5. Rename file `.env.example` to `.env` at src folder
 
-6. To run application you should install [Docker](https://docs.docker.com/get-docker/)
 
 
 ## Running application
+To run application you should install [Docker](https://docs.docker.com/get-docker/)
 
-Application will run in docker containers in development mode.
+Firs you should build the app
+```sh
+npm run build
+```
 
-First you need to create two images, one for the application and one for database. 
-For that in folder with `docker-comose.yml` file run command
+
+Then run command
 ```sh
 docker compose up
 ```
-After that you'll see message 'Listening at http://loaclhost: 4000' in console, that means  application and database successfully started. If you got an error be sure that you performed step 5 at Installation section.
+Application will run in docker containers in development mode.
 
-The database now has no any entity and you should generate and run migration.
-For generate migration open another console window and run command
+At the first time you should run migrations with command
+```sh
+docker exec app npm run migration:run
+```
+
+To stop docker container run command
+```sh
+docker compose down
+```
+
+### Migration
+
+To generate migration
 ```sh
 docker exec app npm run migration:generate
 ```
@@ -53,27 +67,21 @@ To run migration run command
 docker exec app npm run migration:run
 ```
 
-OR with one command 
+OR instead both command above run command bellow, this generate and run migrations
 ```sh
 npm run migrate:docker
 ```
 
-After that database will updated and application will be ready to use or running tests
 
-To stop docker container run command
-```sh
-docker compose down
-```
+
 ### Vulnerability scanning
 
-After `docker compose up` command will be completed you can scan built images for vulnerabilities
-
-with command
-
+After `docker compose up` command will be completed you can scan built images for vulnerabilities with command
 ```sh
 npm run scan
 ```
 
+### Swagger
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/api/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
