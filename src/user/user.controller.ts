@@ -18,6 +18,7 @@ import {
   ApiNotFoundResponse,
   ApiBadRequestResponse,
   ApiNoContentResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,7 +27,10 @@ import { UpdatePasswordDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { plainToInstance } from 'class-transformer';
 import { User } from './entities/user.entity';
+import { NotFoundDto } from 'src/common/not-found.dto';
+import { BadRequestDto } from 'src/common/bad-request.dto';
 
+@ApiTags('user')
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
@@ -44,7 +48,7 @@ export class UserController {
   @Get()
   @ApiOkResponse({
     description: 'Return user array or empty array',
-    type: Array<UserResponse>,
+    type: [UserResponse],
   })
   findAll() {
     return this.userService.findAll();
@@ -52,8 +56,14 @@ export class UserController {
 
   @Get(':id')
   @ApiOkResponse({ description: 'Return user by ID', type: UserResponse })
-  @ApiNotFoundResponse({ description: 'User does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid user ID' })
+  @ApiNotFoundResponse({
+    description: 'User does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid user ID',
+    type: BadRequestDto,
+  })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.userService.findOne(id);
   }
@@ -63,8 +73,14 @@ export class UserController {
     description: 'Update user and return this user',
     type: UserResponse,
   })
-  @ApiNotFoundResponse({ description: 'User does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid user ID' })
+  @ApiNotFoundResponse({
+    description: 'User does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid user ID',
+    type: BadRequestDto,
+  })
   async update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
     @Body() updateUserDto: UpdatePasswordDto,
@@ -76,8 +92,14 @@ export class UserController {
 
   @Delete(':id')
   @ApiNoContentResponse({ description: 'User was removed' })
-  @ApiNotFoundResponse({ description: 'User does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid user ID' })
+  @ApiNotFoundResponse({
+    description: 'User does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid user ID',
+    type: BadRequestDto,
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     await this.userService.remove(id);
