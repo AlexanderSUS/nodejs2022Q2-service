@@ -1,19 +1,19 @@
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateAlbumDto } from './create-album.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsString, IsUUID, IsOptional } from 'class-validator';
 
-export class UpdateAlbumDto extends PartialType(CreateAlbumDto) {
-  @ApiProperty()
+export class UpdateAlbumDto {
+  @ApiProperty({ example: 'To live is to die' })
   @IsString()
+  @IsOptional()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 1988 })
   @IsNumber()
+  @IsOptional()
   year: number;
 
-  @ApiProperty()
-  @IsOptional()
+  @ApiProperty({ example: '1678e952-da14-4bfe-b11b-101e6e1c646f' })
   @IsUUID('4')
-  artistId: string | null; // refers to Artist
+  @IsOptional()
+  artistId: string;
 }

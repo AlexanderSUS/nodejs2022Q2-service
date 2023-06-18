@@ -16,21 +16,25 @@ import {
   ApiNotFoundResponse,
   ApiBadRequestResponse,
   ApiNoContentResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { Album } from './entities/album.entity';
+import { NotFoundDto } from 'src/common/not-found.dto';
+import { BadRequestDto } from 'src/common/bad-request.dto';
+import { CreateAlbumResponseDto } from './dto/create-album-response.dto';
 
+@ApiTags('album')
 @Controller('album')
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
   @Post()
   @ApiCreatedResponse({
-    description: 'Album was created succesfully',
-    type: Album,
+    description: 'Album was created successfully',
+    type: CreateAlbumResponseDto,
   })
   create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumsService.create(createAlbumDto);
@@ -38,17 +42,26 @@ export class AlbumsController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Return Album array or emty array',
-    type: Array<Album>,
+    description: 'Return Album array or empty array',
+    type: [CreateAlbumResponseDto],
   })
   findAll() {
     return this.albumsService.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Return Album by ID', type: Album })
-  @ApiNotFoundResponse({ description: 'Album does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Album ID' })
+  @ApiOkResponse({
+    description: 'Return Album by ID',
+    type: CreateAlbumResponseDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Album does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Album ID',
+    type: BadRequestDto,
+  })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.albumsService.findOne(id);
   }
@@ -56,10 +69,16 @@ export class AlbumsController {
   @Put(':id')
   @ApiOkResponse({
     description: 'Update Album and return this Album',
-    type: Album,
+    type: CreateAlbumResponseDto,
   })
-  @ApiNotFoundResponse({ description: 'Album does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Album ID' })
+  @ApiNotFoundResponse({
+    description: 'Album does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Album ID',
+    type: BadRequestDto,
+  })
   update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
@@ -69,8 +88,14 @@ export class AlbumsController {
 
   @Delete(':id')
   @ApiNoContentResponse({ description: 'Album was removed' })
-  @ApiNotFoundResponse({ description: 'Album does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Album ID' })
+  @ApiNotFoundResponse({
+    description: 'Album does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Album ID',
+    type: BadRequestDto,
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.albumsService.remove(id);
