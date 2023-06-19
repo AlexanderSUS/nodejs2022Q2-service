@@ -16,13 +16,17 @@ import {
   ApiNotFoundResponse,
   ApiBadRequestResponse,
   ApiNoContentResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import parseUuidOptions from 'src/const/uuid';
-import { Track } from './entities/track.entity';
+import { TrackResponseDto } from './dto/track-response.dto';
+import { NotFoundDto } from 'src/common/not-found.dto';
+import { BadRequestDto } from 'src/common/bad-request.dto';
 
+@ApiTags('track')
 @Controller('track')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
@@ -30,7 +34,7 @@ export class TracksController {
   @Post()
   @ApiCreatedResponse({
     description: 'Artist was created successfully',
-    type: Track,
+    type: TrackResponseDto,
   })
   create(@Body() createTrackDto: CreateTrackDto) {
     return this.tracksService.create(createTrackDto);
@@ -39,16 +43,22 @@ export class TracksController {
   @Get()
   @ApiOkResponse({
     description: 'Return Artist array or empty array',
-    type: Array<Track>,
+    type: [TrackResponseDto],
   })
   findAll() {
     return this.tracksService.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Return Artist by ID', type: Track })
-  @ApiNotFoundResponse({ description: 'Artist does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
+  @ApiOkResponse({ description: 'Return Artist by ID', type: TrackResponseDto })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Artist ID',
+    type: BadRequestDto,
+  })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.tracksService.findOne(id);
   }
@@ -56,10 +66,16 @@ export class TracksController {
   @Put(':id')
   @ApiOkResponse({
     description: 'Update Artist and return this Artist',
-    type: Track,
+    type: TrackResponseDto,
   })
-  @ApiNotFoundResponse({ description: 'Artist does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Artist ID',
+    type: BadRequestDto,
+  })
   update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
@@ -69,8 +85,14 @@ export class TracksController {
 
   @Delete(':id')
   @ApiNoContentResponse({ description: 'Artist was removed' })
-  @ApiNotFoundResponse({ description: 'Artist does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Artist ID',
+    type: BadRequestDto,
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.tracksService.remove(id);

@@ -9,16 +9,16 @@ export class UpdateTrackDto extends PartialType(CreateTrackDto) {
   name: string;
 
   @ApiProperty()
-  @IsOptional()
   @IsUUID('4')
-  artistId: string | null; // refers to Artist
+  @IsOptional()
+  artistId: string | null;
 
   @ApiProperty()
-  @IsOptional()
   @IsUUID('4')
-  albumId: string | null; // refers to Album
+  @IsOptional()
+  albumId: string | null;
 
   @ApiProperty()
   @IsNumber()
-  duration: number; // integer number
+  duration: number;
 }
