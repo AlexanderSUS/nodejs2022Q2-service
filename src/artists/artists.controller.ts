@@ -16,13 +16,17 @@ import {
   ApiNotFoundResponse,
   ApiBadRequestResponse,
   ApiNoContentResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { Artist } from './entities/artist.entity';
+import { ArtistsResponseDto } from './dto/artist-response.dto';
+import { NotFoundDto } from 'src/common/not-found.dto';
+import { BadRequestDto } from 'src/common/bad-request.dto';
 
+@ApiTags('artist')
 @Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
@@ -30,7 +34,7 @@ export class ArtistsController {
   @Post()
   @ApiCreatedResponse({
     description: 'Artist was created successfully',
-    type: Artist,
+    type: ArtistsResponseDto,
   })
   create(@Body() createArtistDto: CreateArtistDto) {
     return this.artistsService.create(createArtistDto);
@@ -39,16 +43,25 @@ export class ArtistsController {
   @Get()
   @ApiOkResponse({
     description: 'Return Artist array or empty array',
-    type: Array<Artist>,
+    type: [ArtistsResponseDto],
   })
   findAll() {
     return this.artistsService.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Return Artist by ID', type: Artist })
-  @ApiNotFoundResponse({ description: 'Artist does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
+  @ApiOkResponse({
+    description: 'Return Artist by ID',
+    type: ArtistsResponseDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Artist ID',
+    type: BadRequestDto,
+  })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.artistsService.findOne(id);
   }
@@ -56,10 +69,16 @@ export class ArtistsController {
   @Put(':id')
   @ApiOkResponse({
     description: 'Update Artist and return this Artist',
-    type: Artist,
+    type: ArtistsResponseDto,
   })
-  @ApiNotFoundResponse({ description: 'Artist does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Artist ID',
+    type: BadRequestDto,
+  })
   update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
@@ -69,8 +88,14 @@ export class ArtistsController {
 
   @Delete(':id')
   @ApiNoContentResponse({ description: 'Artist was removed' })
-  @ApiNotFoundResponse({ description: 'Artist does not exits' })
-  @ApiBadRequestResponse({ description: 'Invalid Artist ID' })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Artist ID',
+    type: BadRequestDto,
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.artistsService.remove(id);
