@@ -41,7 +41,7 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @ApiOkResponse({ description: 'User was successfully logined' })
+  @ApiOkResponse({ description: 'User was successfully logged in' })
   @ApiNotFoundResponse({
     description: 'Invalid credentials has been provided',
   })

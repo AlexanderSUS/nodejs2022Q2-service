@@ -22,7 +22,7 @@ import {
 } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserResponse } from './dto/response-user.dto';
+import { UserResponse } from './dto/user-response.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { plainToInstance } from 'class-transformer';

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { IUser } from 'src/user/interfaces/user.interface';
+// import { IUser } from 'src/user/interfaces/user.interface';
 import { UserService } from 'src/user/user.service';
 import { TokensService } from './tokens.service';
 import { HashService } from './hash.service';
 import { User } from 'src/user/entities/user.entity';
+import { IUser } from 'src/user/interfaces/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +37,7 @@ export class AuthService {
     return { message: 'User was successfully created' };
   }
 
-  async login({ login, id: userId }: IUser) {
+  async login({ login, id: userId }: User) {
     const tokens = this.tokensService.getTokens({ login, userId });
     const refreshTokenHash = await this.hashService.hash(tokens.refreshToken);
     await this.userService.updateRefreshToken(userId, refreshTokenHash);

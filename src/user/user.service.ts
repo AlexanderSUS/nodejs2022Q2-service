@@ -1,6 +1,5 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { UpdatePasswordDto } from './dto/update-user.dto';
-import { IUser } from './interfaces/user.interface';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -11,7 +10,7 @@ export class UserService {
     return this.userRepository.create(data);
   }
 
-  findAll(): Promise<IUser[]> {
+  findAll() {
     return this.userRepository.getAll();
   }
 
@@ -31,7 +30,7 @@ export class UserService {
     const user = await this.userRepository.getById(id);
 
     if (updatePasswordDto.oldPassword !== user.password) {
-      throw new HttpException('Old password is wrong', HttpStatus.FORBIDDEN);
+      throw new ForbiddenException('Old password is wrong');
     }
 
     return this.userRepository.update(id, {

@@ -13,7 +13,7 @@ import {
 export class User {
   @PrimaryGeneratedColumn()
   @Generated('uuid')
-  id: string; // uuid v4
+  id: string;
 
   @Column()
   login: string;
