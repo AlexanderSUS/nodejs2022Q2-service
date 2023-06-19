@@ -13,6 +13,7 @@ import {
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -21,7 +22,13 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Public } from './public.decorator';
 import { RefreshAuthGuard } from './refresh-auth.guard';
 import { RequestWithUser } from './interface/request-with-user.interface';
+import { BadRequestDto } from 'src/common/bad-request.dto';
+import { NotFoundDto } from 'src/common/not-found.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
+import { ForbiddenDto } from 'src/common/forbidden.dto';
+import { UnauthorizedDto } from 'src/common/unauthorized.dto';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -33,6 +40,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({
     description: 'Invalid credentials has been provided',
+    type: BadRequestDto,
   })
   signUp(@Body() createUserDto: CreateUserDto) {
     return this.authService.signUp(createUserDto);
@@ -41,12 +49,17 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @ApiOkResponse({ description: 'User was successfully logged in' })
+  @ApiOkResponse({
+    description: 'User was successfully logged in',
+    type: LoginResponseDto,
+  })
   @ApiNotFoundResponse({
     description: 'Invalid credentials has been provided',
+    type: NotFoundDto,
   })
   @ApiForbiddenResponse({
     description: "user with such login, password doesn't exist",
+    type: ForbiddenDto,
   })
   @HttpCode(HttpStatus.OK)
   async login(@Request() { user }: RequestWithUser) {
@@ -56,9 +69,13 @@ export class AuthController {
   @Public()
   @UseGuards(RefreshAuthGuard)
   @Post('refresh')
-  @ApiOkResponse({ description: 'Token was successfully refreshed' })
+  @ApiOkResponse({
+    description: 'Token was successfully refreshed',
+    type: LoginResponseDto,
+  })
   @ApiUnauthorizedResponse({
     description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
   })
   @HttpCode(HttpStatus.OK)
   refresh(@Request() { user }: RequestWithUser) {
