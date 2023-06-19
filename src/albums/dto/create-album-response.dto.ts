@@ -4,7 +4,7 @@ export class CreateAlbumResponseDto {
   @ApiProperty({ example: 'a7d2464c-430e-4bc5-a611-bc05535a47c5' })
   id: string;
 
-  @ApiProperty({ example: 'To live is to die' })
+  @ApiProperty({ example: '...And Justice for All' })
   name: string;
 
   @ApiProperty({ example: 1988 })

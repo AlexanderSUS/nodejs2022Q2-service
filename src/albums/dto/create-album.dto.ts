@@ -2,7 +2,7 @@ import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAlbumDto {
-  @ApiProperty({ example: 'To live is to die' })
+  @ApiProperty({ example: '...And Justice for All' })
   @IsString()
   name: string;
 
