@@ -17,6 +17,7 @@ import {
   ApiBadRequestResponse,
   ApiNoContentResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { ArtistsService } from './artists.service';
@@ -25,6 +26,7 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistsResponseDto } from './dto/artist-response.dto';
 import { NotFoundDto } from 'src/common/not-found.dto';
 import { BadRequestDto } from 'src/common/bad-request.dto';
+import { UnauthorizedDto } from 'src/common/unauthorized.dto';
 
 @ApiTags('artist')
 @Controller('artist')
@@ -36,6 +38,14 @@ export class ArtistsController {
     description: 'Artist was created successfully',
     type: ArtistsResponseDto,
   })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid Album ID',
+    type: BadRequestDto,
+  })
   create(@Body() createArtistDto: CreateArtistDto) {
     return this.artistsService.create(createArtistDto);
   }
@@ -45,6 +55,10 @@ export class ArtistsController {
     description: 'Return Artist array or empty array',
     type: [ArtistsResponseDto],
   })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
   findAll() {
     return this.artistsService.findAll();
   }
@@ -53,6 +67,10 @@ export class ArtistsController {
   @ApiOkResponse({
     description: 'Return Artist by ID',
     type: ArtistsResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
   })
   @ApiNotFoundResponse({
     description: 'Artist does not exits',
@@ -71,13 +89,17 @@ export class ArtistsController {
     description: 'Update Artist and return this Artist',
     type: ArtistsResponseDto,
   })
-  @ApiNotFoundResponse({
-    description: 'Artist does not exits',
-    type: NotFoundDto,
-  })
   @ApiBadRequestResponse({
     description: 'Invalid Artist ID',
     type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
   })
   update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
@@ -88,13 +110,17 @@ export class ArtistsController {
 
   @Delete(':id')
   @ApiNoContentResponse({ description: 'Artist was removed' })
-  @ApiNotFoundResponse({
-    description: 'Artist does not exits',
-    type: NotFoundDto,
-  })
   @ApiBadRequestResponse({
     description: 'Invalid Artist ID',
     type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {

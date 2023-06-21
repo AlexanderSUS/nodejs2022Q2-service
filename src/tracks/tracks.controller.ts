@@ -17,6 +17,7 @@ import {
   ApiBadRequestResponse,
   ApiNoContentResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -25,6 +26,7 @@ import parseUuidOptions from 'src/const/uuid';
 import { TrackResponseDto } from './dto/track-response.dto';
 import { NotFoundDto } from 'src/common/not-found.dto';
 import { BadRequestDto } from 'src/common/bad-request.dto';
+import { UnauthorizedDto } from 'src/common/unauthorized.dto';
 
 @ApiTags('track')
 @Controller('track')
@@ -36,6 +38,10 @@ export class TracksController {
     description: 'Artist was created successfully',
     type: TrackResponseDto,
   })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
   create(@Body() createTrackDto: CreateTrackDto) {
     return this.tracksService.create(createTrackDto);
   }
@@ -45,19 +51,27 @@ export class TracksController {
     description: 'Return Artist array or empty array',
     type: [TrackResponseDto],
   })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
   findAll() {
     return this.tracksService.findAll();
   }
 
   @Get(':id')
   @ApiOkResponse({ description: 'Return Artist by ID', type: TrackResponseDto })
-  @ApiNotFoundResponse({
-    description: 'Artist does not exits',
-    type: NotFoundDto,
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
   })
   @ApiBadRequestResponse({
     description: 'Invalid Artist ID',
     type: BadRequestDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
   })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.tracksService.findOne(id);
@@ -68,13 +82,17 @@ export class TracksController {
     description: 'Update Artist and return this Artist',
     type: TrackResponseDto,
   })
-  @ApiNotFoundResponse({
-    description: 'Artist does not exits',
-    type: NotFoundDto,
-  })
   @ApiBadRequestResponse({
     description: 'Invalid Artist ID',
     type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
   })
   update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
@@ -85,13 +103,17 @@ export class TracksController {
 
   @Delete(':id')
   @ApiNoContentResponse({ description: 'Artist was removed' })
-  @ApiNotFoundResponse({
-    description: 'Artist does not exits',
-    type: NotFoundDto,
-  })
   @ApiBadRequestResponse({
     description: 'Invalid Artist ID',
     type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Artist does not exits',
+    type: NotFoundDto,
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {

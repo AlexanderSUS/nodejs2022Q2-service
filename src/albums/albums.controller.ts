@@ -17,6 +17,7 @@ import {
   ApiBadRequestResponse,
   ApiNoContentResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { AlbumsService } from './albums.service';
@@ -25,6 +26,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { NotFoundDto } from 'src/common/not-found.dto';
 import { BadRequestDto } from 'src/common/bad-request.dto';
 import { CreateAlbumResponseDto } from './dto/create-album-response.dto';
+import { UnauthorizedDto } from 'src/common/unauthorized.dto';
 
 @ApiTags('album')
 @Controller('album')
@@ -36,6 +38,14 @@ export class AlbumsController {
     description: 'Album was created successfully',
     type: CreateAlbumResponseDto,
   })
+  @ApiBadRequestResponse({
+    description: 'Invalid Artist ID',
+    type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
   create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumsService.create(createAlbumDto);
   }
@@ -44,6 +54,10 @@ export class AlbumsController {
   @ApiOkResponse({
     description: 'Return Album array or empty array',
     type: [CreateAlbumResponseDto],
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
   })
   findAll() {
     return this.albumsService.findAll();
@@ -57,6 +71,10 @@ export class AlbumsController {
   @ApiNotFoundResponse({
     description: 'Album does not exits',
     type: NotFoundDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
   })
   @ApiBadRequestResponse({
     description: 'Invalid Album ID',
@@ -75,6 +93,10 @@ export class AlbumsController {
     description: 'Album does not exits',
     type: NotFoundDto,
   })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
   @ApiBadRequestResponse({
     description: 'Invalid Album ID',
     type: BadRequestDto,
@@ -91,6 +113,10 @@ export class AlbumsController {
   @ApiNotFoundResponse({
     description: 'Album does not exits',
     type: NotFoundDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
   })
   @ApiBadRequestResponse({
     description: 'Invalid Album ID',

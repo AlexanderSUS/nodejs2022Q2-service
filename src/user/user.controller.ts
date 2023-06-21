@@ -19,6 +19,7 @@ import {
   ApiBadRequestResponse,
   ApiNoContentResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -29,6 +30,7 @@ import { plainToInstance } from 'class-transformer';
 import { User } from './entities/user.entity';
 import { NotFoundDto } from 'src/common/not-found.dto';
 import { BadRequestDto } from 'src/common/bad-request.dto';
+import { UnauthorizedDto } from 'src/common/unauthorized.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -41,6 +43,14 @@ export class UserController {
     description: 'User was created successfully',
     type: UserResponse,
   })
+  @ApiBadRequestResponse({
+    description: 'Invalid Album ID',
+    type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -50,19 +60,27 @@ export class UserController {
     description: 'Return user array or empty array',
     type: [UserResponse],
   })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
   findAll() {
     return this.userService.findAll();
   }
 
   @Get(':id')
   @ApiOkResponse({ description: 'Return user by ID', type: UserResponse })
-  @ApiNotFoundResponse({
-    description: 'User does not exits',
-    type: NotFoundDto,
-  })
   @ApiBadRequestResponse({
     description: 'Invalid user ID',
     type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'User does not exits',
+    type: NotFoundDto,
   })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.userService.findOne(id);
@@ -73,13 +91,17 @@ export class UserController {
     description: 'Update user and return this user',
     type: UserResponse,
   })
-  @ApiNotFoundResponse({
-    description: 'User does not exits',
-    type: NotFoundDto,
-  })
   @ApiBadRequestResponse({
     description: 'Invalid user ID',
     type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'User does not exits',
+    type: NotFoundDto,
   })
   async update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
@@ -92,13 +114,17 @@ export class UserController {
 
   @Delete(':id')
   @ApiNoContentResponse({ description: 'User was removed' })
-  @ApiNotFoundResponse({
-    description: 'User does not exits',
-    type: NotFoundDto,
-  })
   @ApiBadRequestResponse({
     description: 'Invalid user ID',
     type: BadRequestDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token is invalid or expired',
+    type: UnauthorizedDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'User does not exits',
+    type: NotFoundDto,
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
