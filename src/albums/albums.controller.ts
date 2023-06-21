@@ -23,10 +23,10 @@ import parseUuidOptions from 'src/const/uuid';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { NotFoundDto } from 'src/common/not-found.dto';
-import { BadRequestDto } from 'src/common/bad-request.dto';
+import { NotFoundDto } from 'src/common/dto/not-found.dto';
+import { BadRequestDto } from 'src/common/dto//bad-request.dto';
 import { CreateAlbumResponseDto } from './dto/create-album-response.dto';
-import { UnauthorizedDto } from 'src/common/unauthorized.dto';
+import { UnauthorizedDto } from 'src/common/dto/unauthorized.dto';
 
 @ApiTags('album')
 @Controller('album')

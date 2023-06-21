@@ -24,9 +24,9 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import parseUuidOptions from 'src/const/uuid';
 import { TrackResponseDto } from './dto/track-response.dto';
-import { NotFoundDto } from 'src/common/not-found.dto';
-import { BadRequestDto } from 'src/common/bad-request.dto';
-import { UnauthorizedDto } from 'src/common/unauthorized.dto';
+import { NotFoundDto } from 'src/common/dto/not-found.dto';
+import { BadRequestDto } from 'src/common/dto//bad-request.dto';
+import { UnauthorizedDto } from 'src/common/dto/unauthorized.dto';
 
 @ApiTags('track')
 @Controller('track')

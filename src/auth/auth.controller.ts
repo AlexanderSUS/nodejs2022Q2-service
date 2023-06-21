@@ -22,11 +22,11 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Public } from './public.decorator';
 import { RefreshAuthGuard } from './refresh-auth.guard';
 import { RequestWithUser } from './interface/request-with-user.interface';
-import { BadRequestDto } from 'src/common/bad-request.dto';
-import { NotFoundDto } from 'src/common/not-found.dto';
+import { BadRequestDto } from 'src/common/dto//bad-request.dto';
+import { NotFoundDto } from 'src/common/dto/not-found.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
-import { ForbiddenDto } from 'src/common/forbidden.dto';
-import { UnauthorizedDto } from 'src/common/unauthorized.dto';
+import { ForbiddenDto } from 'src/common/dto/forbidden.dto';
+import { UnauthorizedDto } from 'src/common/dto/unauthorized.dto';
 
 @ApiTags('auth')
 @Controller('auth')

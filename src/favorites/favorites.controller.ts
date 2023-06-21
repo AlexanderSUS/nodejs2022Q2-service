@@ -20,9 +20,9 @@ import {
 import { FavoritesService } from './favorites.service';
 import parseUuidOptions from 'src/const/uuid';
 import { FavoriteResponseDto } from './dto/favorite-response.dto';
-import { NotFoundDto } from 'src/common/not-found.dto';
-import { BadRequestDto } from 'src/common/bad-request.dto';
-import { UnauthorizedDto } from 'src/common/unauthorized.dto';
+import { NotFoundDto } from 'src/common/dto/not-found.dto';
+import { BadRequestDto } from 'src/common/dto//bad-request.dto';
+import { UnauthorizedDto } from 'src/common/dto/unauthorized.dto';
 
 @ApiTags('favs')
 @Controller('favs')

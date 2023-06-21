@@ -24,9 +24,9 @@ import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { ArtistsResponseDto } from './dto/artist-response.dto';
-import { NotFoundDto } from 'src/common/not-found.dto';
-import { BadRequestDto } from 'src/common/bad-request.dto';
-import { UnauthorizedDto } from 'src/common/unauthorized.dto';
+import { NotFoundDto } from 'src/common/dto/not-found.dto';
+import { BadRequestDto } from 'src/common/dto//bad-request.dto';
+import { UnauthorizedDto } from 'src/common/dto/unauthorized.dto';
 
 @ApiTags('artist')
 @Controller('artist')

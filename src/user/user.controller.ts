@@ -28,9 +28,9 @@ import { UpdatePasswordDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { plainToInstance } from 'class-transformer';
 import { User } from './entities/user.entity';
-import { NotFoundDto } from 'src/common/not-found.dto';
-import { BadRequestDto } from 'src/common/bad-request.dto';
-import { UnauthorizedDto } from 'src/common/unauthorized.dto';
+import { NotFoundDto } from 'src/common/dto/not-found.dto';
+import { BadRequestDto } from 'src/common/dto//bad-request.dto';
+import { UnauthorizedDto } from 'src/common/dto/unauthorized.dto';
 
 @ApiTags('user')
 @Controller('user')
