@@ -8,8 +8,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
-  ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -22,11 +20,12 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Public } from './public.decorator';
 import { RefreshAuthGuard } from './refresh-auth.guard';
 import { RequestWithUser } from './interface/request-with-user.interface';
-import { BadRequestDto } from 'src/common/dto//bad-request.dto';
 import { NotFoundDto } from 'src/common/dto/not-found.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { ForbiddenDto } from 'src/common/dto/forbidden.dto';
 import { UnauthorizedDto } from 'src/common/dto/unauthorized.dto';
+import { SignUpResponseDto } from './dto/sign-up-response.dto';
+import { SignUpApiResponse } from 'src/common/decorators/sign-up-api-response.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -35,12 +34,10 @@ export class AuthController {
 
   @Public()
   @Post('signup')
-  @ApiCreatedResponse({
-    description: 'User was successfully signed up',
-  })
-  @ApiBadRequestResponse({
-    description: 'Invalid credentials has been provided',
-    type: BadRequestDto,
+  @SignUpApiResponse({
+    successResponseType: SignUpResponseDto,
+    successDescription: 'User was successfully signed up',
+    badRequestDescription: 'Reason',
   })
   signUp(@Body() createUserDto: CreateUserDto) {
     return this.authService.signUp(createUserDto);
