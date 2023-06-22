@@ -10,7 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -22,6 +22,7 @@ import { UpdateEntityApiResponse } from 'src/common/decorators/update-entity-api
 import { DeleteEntityApiResponse } from 'src/common/decorators/delete-entity-api-response.decorator';
 
 @ApiTags('artist')
+@ApiBearerAuth()
 @Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}

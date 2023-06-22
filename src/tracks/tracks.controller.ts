@@ -10,7 +10,7 @@ import {
   HttpStatus,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
@@ -23,6 +23,7 @@ import { UpdateEntityApiResponse } from 'src/common/decorators/update-entity-api
 import { DeleteEntityApiResponse } from 'src/common/decorators/delete-entity-api-response.decorator';
 
 @ApiTags('track')
+@ApiBearerAuth()
 @Controller('track')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}

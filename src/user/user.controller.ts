@@ -12,7 +12,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserResponse } from './dto/user-response.dto';
@@ -27,6 +27,7 @@ import { UpdateEntityApiResponse } from 'src/common/decorators/update-entity-api
 import { DeleteEntityApiResponse } from 'src/common/decorators/delete-entity-api-response.decorator';
 
 @ApiTags('user')
+@ApiBearerAuth()
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {

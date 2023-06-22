@@ -14,6 +14,7 @@ import {
   ApiNoContentResponse,
   ApiTags,
   ApiUnauthorizedResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { FavoritesService } from './favorites.service';
 import parseUuidOptions from 'src/const/uuid';
@@ -26,6 +27,7 @@ import { UpdateEntityApiResponse } from 'src/common/decorators/update-entity-api
 import { DeleteEntityApiResponse } from 'src/common/decorators/delete-entity-api-response.decorator';
 
 @ApiTags('favs')
+@ApiBearerAuth()
 @Controller('favs')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
