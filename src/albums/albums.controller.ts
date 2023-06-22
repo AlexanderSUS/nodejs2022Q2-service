@@ -10,23 +10,17 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import {
-  ApiOkResponse,
-  ApiCreatedResponse,
-  ApiNotFoundResponse,
-  ApiBadRequestResponse,
-  ApiNoContentResponse,
-  ApiTags,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import parseUuidOptions from 'src/const/uuid';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { NotFoundDto } from 'src/common/dto/not-found.dto';
-import { BadRequestDto } from 'src/common/dto//bad-request.dto';
 import { CreateAlbumResponseDto } from './dto/create-album-response.dto';
-import { UnauthorizedDto } from 'src/common/dto/unauthorized.dto';
+import { CreateEntityApiResponse } from 'src/common/decorators/create-entity-api-response.decorator';
+import { GetAllApiResponse } from 'src/common/decorators/get-all-api-response.decorator';
+import { GetByIdApiResponse } from 'src/common/decorators/get-by-id-api-response.decorator';
+import { UpdateEntityApiResponse } from 'src/common/decorators/update-entity-api-response.decorator';
+import { DeleteEntityApiResponse } from 'src/common/decorators/delete-entity-api-response.decorator';
 
 @ApiTags('album')
 @Controller('album')
@@ -34,72 +28,45 @@ export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
   @Post()
-  @ApiCreatedResponse({
-    description: 'Album was created successfully',
-    type: CreateAlbumResponseDto,
-  })
-  @ApiBadRequestResponse({
-    description: 'Invalid Artist ID',
-    type: BadRequestDto,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Refresh token is invalid or expired',
-    type: UnauthorizedDto,
+  @CreateEntityApiResponse({
+    successResponseType: CreateAlbumResponseDto,
+    successDescription: 'Album was created successfully',
+    badRequestDescription: 'Invalid Artist ID',
+    unauthorizedDescription: 'Refresh token is invalid or expired',
   })
   create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumsService.create(createAlbumDto);
   }
 
   @Get()
-  @ApiOkResponse({
-    description: 'Return Album array or empty array',
-    type: [CreateAlbumResponseDto],
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Refresh token is invalid or expired',
-    type: UnauthorizedDto,
+  @GetAllApiResponse({
+    successResponseType: [CreateAlbumResponseDto],
+    successDescription: 'Return Album array or empty array',
+    unauthorizedDescription: 'Refresh token is invalid or expired',
   })
   findAll() {
     return this.albumsService.findAll();
   }
 
   @Get(':id')
-  @ApiOkResponse({
-    description: 'Return Album by ID',
-    type: CreateAlbumResponseDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'Album does not exits',
-    type: NotFoundDto,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Refresh token is invalid or expired',
-    type: UnauthorizedDto,
-  })
-  @ApiBadRequestResponse({
-    description: 'Invalid Album ID',
-    type: BadRequestDto,
+  @GetByIdApiResponse({
+    successResponseType: CreateAlbumResponseDto,
+    successDescription: 'Return Album by ID',
+    badRequestDescription: 'Invalid Album ID',
+    unauthorizedDescription: 'Refresh token is invalid or expired',
+    notFoundDescription: 'Album does not exits',
   })
   findOne(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {
     return this.albumsService.findOne(id);
   }
 
   @Put(':id')
-  @ApiOkResponse({
-    description: 'Update Album and return this Album',
-    type: CreateAlbumResponseDto,
-  })
-  @ApiNotFoundResponse({
-    description: 'Album does not exits',
-    type: NotFoundDto,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Refresh token is invalid or expired',
-    type: UnauthorizedDto,
-  })
-  @ApiBadRequestResponse({
-    description: 'Invalid Album ID',
-    type: BadRequestDto,
+  @UpdateEntityApiResponse({
+    successResponseType: CreateAlbumResponseDto,
+    successDescription: 'Update Album and return this Album',
+    badRequestDescription: 'Invalid album ID',
+    unauthorizedDescription: 'Refresh token is invalid or expired',
+    notFoundDescription: 'Album does not exits',
   })
   update(
     @Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string,
@@ -109,18 +76,11 @@ export class AlbumsController {
   }
 
   @Delete(':id')
-  @ApiNoContentResponse({ description: 'Album was removed' })
-  @ApiNotFoundResponse({
-    description: 'Album does not exits',
-    type: NotFoundDto,
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Refresh token is invalid or expired',
-    type: UnauthorizedDto,
-  })
-  @ApiBadRequestResponse({
-    description: 'Invalid Album ID',
-    type: BadRequestDto,
+  @DeleteEntityApiResponse({
+    successDescription: 'Delete album',
+    badRequestDescription: 'Invalid album ID',
+    unauthorizedDescription: 'Refresh token is invalid or expired',
+    notFoundDescription: 'Album does not exits',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', new ParseUUIDPipe(parseUuidOptions)) id: string) {

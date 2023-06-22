@@ -24,7 +24,7 @@ import { CreateEntityApiResponse } from 'src/common/decorators/create-entity-api
 import { GetAllApiResponse } from 'src/common/decorators/get-all-api-response.decorator';
 import { GetByIdApiResponse } from 'src/common/decorators/get-by-id-api-response.decorator';
 import { UpdateEntityApiResponse } from 'src/common/decorators/update-entity-api-response.decorator';
-import { DeleteEntityApiResponse } from 'src/common/decorators/delete-entity-api-response.decoraror';
+import { DeleteEntityApiResponse } from 'src/common/decorators/delete-entity-api-response.decorator';
 
 @ApiTags('user')
 @Controller('user')
@@ -84,7 +84,6 @@ export class UserController {
 
   @Delete(':id')
   @DeleteEntityApiResponse({
-    successResponseType: UserResponse,
     successDescription: 'Delete user',
     badRequestDescription: 'Invalid user ID',
     unauthorizedDescription: 'Refresh token is invalid or expired',

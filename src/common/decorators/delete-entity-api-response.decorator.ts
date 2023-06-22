@@ -3,7 +3,6 @@ import {
   ApiBadRequestResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
-  ApiResponseMetadata,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { BadRequestDto } from '../dto/bad-request.dto';
@@ -11,7 +10,6 @@ import { UnauthorizedDto } from '../dto/unauthorized.dto';
 import { NotFoundDto } from '../dto/not-found.dto';
 
 type DeleteEntityApiResponseProps = {
-  successResponseType: ApiResponseMetadata['type'];
   successDescription: string;
   badRequestDescription: string;
   unauthorizedDescription: string;
@@ -19,7 +17,6 @@ type DeleteEntityApiResponseProps = {
 };
 
 export function DeleteEntityApiResponse({
-  successResponseType,
   successDescription,
   badRequestDescription,
   unauthorizedDescription,
@@ -28,7 +25,6 @@ export function DeleteEntityApiResponse({
   return applyDecorators(
     ApiNoContentResponse({
       description: successDescription,
-      type: successResponseType,
     }),
     ApiBadRequestResponse({
       description: badRequestDescription,
