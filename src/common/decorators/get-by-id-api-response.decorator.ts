@@ -1,8 +1,8 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiResponseMetadata,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -26,7 +26,7 @@ export function GetByIdApiResponse({
   notFoundDescription,
 }: GetByIdApiResponseProps) {
   return applyDecorators(
-    ApiCreatedResponse({
+    ApiOkResponse({
       description: successDescription,
       type: successResponseType,
     }),
